@@ -26,11 +26,11 @@ Sign in with any demo account. The demo passcode is `demo1234` (set `FINTELLECT_
 
 | Account | Role | Can do |
 |---|---|---|
-| Rachel Tan (`U01`) | Owner, B001 | Read, change figures, view the activity log |
-| Marcus Lee (`U02`) | Finance admin, B001 | Read, change figures |
-| External accountant (`U03`) | Accountant, B001 | Read only |
+| Celia (`U01`) | Owner, B001 | Read, change figures, view the activity log |
+| Daniel (`U02`) | Finance admin, B001 | Read, change figures |
+| Jun Ze (`U03`) | Accountant, B001 | Read only |
 | Finance copilot (`AGENT`) | AI agent, B001 | Read only (drafting is reserved for the agent layer) |
-| Kelvin Ang (`U90`) | Owner, B002 | Only Petal & Stem Florist's own data |
+| Chloe (`U90`) | Owner, B002 | Only Petal & Stem Florist's own data |
 
 ### Configuration
 

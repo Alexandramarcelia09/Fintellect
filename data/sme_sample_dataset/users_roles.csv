@@ -1,6 +1,6 @@
 business_id,user_id,name,role,permissions,mfa_enrolled
-B001,U01,Rachel Tan,owner,read; approve_payments; manage_payees; configure_rules,True
-B001,U02,Marcus Lee,finance_admin,read; create_bills; request_payments; upload_receipts,True
-B001,U03,External accountant,accountant,read,False
+B001,U01,Celia,owner,read; approve_payments; manage_payees; configure_rules,True
+B001,U02,Daniel,finance_admin,read; create_bills; request_payments; upload_receipts,True
+B001,U03,Jun Ze,accountant,read,False
 B001,AGENT,Finance copilot (AI agent),agent,read; draft_recommendations; draft_messages (send requires user confirmation),False
-B002,U90,Kelvin Ang,owner,read; approve_payments,True
+B002,U90,Chloe,owner,read; approve_payments,True

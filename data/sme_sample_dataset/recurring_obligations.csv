@@ -4,7 +4,7 @@ B001,Rent (renewed lease),Tanjong Walk Mall Mgmt,monthly,1,10500.0,2027-01-01,20
 B001,Payroll net pay,Employees (GIRO batch),monthly,28,21424.0,,,6000,See payroll_runs; December includes 1-month bonus for eligible full-timers
 B001,CPF contributions,CPF Board,monthly,14,9908.6,,,6000/6010,Paid month after payroll
 B001,Loan LN-001 installment,Lion City Bank,monthly,1,2253.57,2024-11-01,2029-10-01,2300/7000,See loan_schedule
-B001,Owner drawings,Rachel Tan,monthly,5,6500.0,2026-04-01,,3100,"Discretionary; raised from 4,000 in Apr 2026"
+B001,Owner drawings,Celia,monthly,5,6500.0,2026-04-01,,3100,"Discretionary; raised from 4,000 in Apr 2026"
 B001,Utilities,CityPower Utilities,monthly,15,2250.0,,,6110,"Variable, estimate; higher Apr-Jun"
 B001,Internet & phone,Fibrelink Telecom,monthly,8,180.0,,,6120,
 B001,POS software,TillCloud,monthly,3,249.0,,,6130,
