@@ -1,4 +1,4 @@
-// Neraca frontend. All calculations come from the shared engine in /engine (the same modules the
+// Fintellect frontend. All calculations come from the shared engine in /engine (the same modules the
 // server and the tests run). Business data is loaded from the API for the signed-in user only.
 import { MN, ml, ms, msy, addM, monthEnd, POS_GROUP, sumObj, computeHistory, runwayAt, forecast as engineForecast, fcSummary, forecastWeekly, weeklyByCategory, fmtDayMonth } from "/engine/index.js";
 
@@ -18,7 +18,7 @@ async function api(path, opts = {}) {
 }
 
 /* ---------- State ---------- */
-const UI_KEY = "neraca-ui-v1";
+const UI_KEY = "fintellect-ui-v1";
 const DATA_KEYS = ["open", "cats", "data", "assumptions", "events", "global", "business"];
 function defaultUi() { return { month: MONTHS[MONTHS.length - 1], cmp: "prev", stTab: "pl", stTime: "month", stCmp: "prev", inMonth: MONTHS[MONTHS.length - 1], scenario: "expected", horizon: "w13", report: "pl" }; }
 function sampleState() {
@@ -222,7 +222,7 @@ function renderSide(){
   const b=S.business,ini=b.name.split(/\s+/).filter(w=>/^[A-Za-z]/.test(w)).map(w=>w[0]).join("").slice(0,2).toUpperCase()||"—";
   const link=(id,label,icon)=>`<a class="nav" href="#${id}" data-route="${id}"${route===id?' aria-current="page"':""}>${ic(icon,19)}<span>${label}</span></a>`;
   document.getElementById("side").innerHTML=`
-  <div class="brand"><span class="mark">${ic("chart",18,2).replace('stroke="currentColor"','stroke="#fff"')}</span>Neraca</div>
+  <div class="brand"><span class="mark">${ic("chart",18,2).replace('stroke="currentColor"','stroke="#fff"')}</span>Fintellect</div>
   <a class="biz" href="#setup" data-route="setup" style="text-decoration:none;color:inherit"><span class="av">${esc(ini)}</span><div><b>${esc(b.name)}</b><small>${esc(b.country)} · S$ · FY ${MN[b.fyStart-1]}</small></div></a>
   ${(DS.limited?[["OVERVIEW",[["dashboard","Dashboard","dashboard"]]]]:NAV).map(([sec,items])=>`<div class="sec">${sec}</div>${items.map(i=>link(...i)).join("")}`).join("")}
   <div class="grow"></div>
@@ -860,7 +860,7 @@ async function loadActivity(){
 async function showLogin(msg){
   let users=[];try{users=(await api("/api/users")).users;}catch(e){}
   document.getElementById("app").outerHTML=`<main class="login" id="login"><form class="card" id="loginForm" novalidate>
-    <div class="brand dark"><span class="mark">${ic("chart",18,2).replace('stroke="currentColor"','stroke="#fff"')}</span>Neraca</div>
+    <div class="brand dark"><span class="mark">${ic("chart",18,2).replace('stroke="currentColor"','stroke="#fff"')}</span>Fintellect</div>
     <h1>Sign in</h1><p class="note">Demo accounts from the sample dataset. Each one only sees its own business.</p>
     <fieldset class="users"><legend class="flabel">Account</legend>${users.map((u,i)=>`<label class="user"><input type="radio" name="uid" value="${esc(u.id)}"${i===0?" checked":""}><span><b>${esc(u.name)}</b><small>${esc(ROLE_NAMES[u.role]||u.role)} · ${esc(u.business||"")}</small></span></label>`).join("")}</fieldset>
     <div class="field"><label for="pass">Passcode</label><span class="inp"><input id="pass" type="password" autocomplete="current-password" required></span><span class="note">The demo passcode is in the README.</span></div>
@@ -880,7 +880,7 @@ async function boot(){
   try{b=await api(`/api/businesses/${encodeURIComponent(me.businessId)}/bootstrap`);}catch(e){return showLogin(e.message);}
   DS=b.dataset;USER=b.user;MONTHS=DS.months;KC=DS.keyCustomer.short;
   S=buildState(b.saved);lastSaved=dataSnapshot();recompute();
-  document.title=`Neraca · ${DS.business.name}`;
+  document.title=`Fintellect · ${DS.business.name}`;
   route=VIEWS[location.hash.slice(1)]?location.hash.slice(1):"dashboard";
   if(DS.limited&&!["dashboard","glossary","activity"].includes(route))route="dashboard";
   render();

@@ -1,4 +1,4 @@
-# Neraca
+# Fintellect
 
 A finance copilot for small businesses. It turns a business's own records (POS sales, invoices, supplier bills, payroll, loan schedule and bank statement) into:
 
@@ -18,7 +18,7 @@ npm test               # 50 tests
 npm run build:data     # optional: writes var/bootstrap-<id>.json for inspection
 ```
 
-Sign in with any demo account. The demo passcode is `demo1234` (set `NERACA_DEMO_PASSCODE` to change it).
+Sign in with any demo account. The demo passcode is `demo1234` (set `FINTELLECT_DEMO_PASSCODE` to change it).
 
 | Account | Role | Can do |
 |---|---|---|
@@ -33,24 +33,26 @@ Sign in with any demo account. The demo passcode is `demo1234` (set `NERACA_DEMO
 | Variable | Default | Purpose |
 |---|---|---|
 | `PORT` | `3000` | HTTP port |
-| `NERACA_SECRET` | random per start | Signs session cookies. **Required** when `NODE_ENV=production`. Use 32+ random characters. |
-| `NERACA_DEMO_PASSCODE` | `demo1234` | Shared demo passcode |
-| `NERACA_SECURE_COOKIES` | off | Set to `1` behind HTTPS so cookies get the `Secure` flag |
-| `NERACA_DATA_DIR` | `data/sme_sample_dataset` | Folder of CSV tables |
-| `NERACA_VAR_DIR` | `var/` | Saved edits (`var/state/<business>.json`) and the audit log (`var/audit.jsonl`) |
+| `FINTELLECT_SECRET` | random per start | Signs session cookies. **Required** when `NODE_ENV=production`. Use 32+ random characters. |
+| `FINTELLECT_DEMO_PASSCODE` | `demo1234` | Shared demo passcode |
+| `FINTELLECT_SECURE_COOKIES` | off | Set to `1` behind HTTPS so cookies get the `Secure` flag |
+| `FINTELLECT_DATA_DIR` | `data/sme_sample_dataset` | Folder of CSV tables |
+| `FINTELLECT_VAR_DIR` | `var/` | Saved edits (`var/state/<business>.json`) and the audit log (`var/audit.jsonl`) |
+
+The app was previously called Neraca; the old `NERACA_*` names still work.
 
 ## Deployment
 
 **Docker**
 
 ```bash
-docker build -t neraca .
-docker run -p 3000:3000 -e NERACA_SECRET="$(openssl rand -hex 32)" -e NERACA_SECURE_COOKIES=1 -v neraca-var:/app/var neraca
+docker build -t fintellect .
+docker run -p 3000:3000 -e FINTELLECT_SECRET="$(openssl rand -hex 32)" -e FINTELLECT_SECURE_COOKIES=1 -v fintellect-var:/app/var fintellect
 ```
 
-**Vercel**: `api/index.js` and `vercel.json` run the app as one serverless function. In the project's Environment Variables set `NERACA_SECRET` (32+ random characters), then redeploy. Saved edits and the activity log are written to `/tmp`, so they reset whenever Vercel recycles the function; use a host with a persistent disk (below) to keep them.
+**Vercel**: `api/index.js` and `vercel.json` run the app as one serverless function. In the project's Environment Variables set `FINTELLECT_SECRET` (32+ random characters), then redeploy. Saved edits and the activity log are written to `/tmp`, so they reset whenever Vercel recycles the function; use a host with a persistent disk (below) to keep them.
 
-**Any Node host** (Render, Railway, Fly.io, a VM): run `npm start` with `NODE_ENV=production` and `NERACA_SECRET` set, behind HTTPS, with `var/` on a persistent disk. The server is a single process with no database.
+**Any Node host** (Render, Railway, Fly.io, a VM): run `npm start` with `NODE_ENV=production` and `FINTELLECT_SECRET` set, behind HTTPS, with `var/` on a persistent disk. The server is a single process with no database.
 
 ## Architecture
 

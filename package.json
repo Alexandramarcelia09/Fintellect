@@ -1,5 +1,5 @@
 {
-  "name": "neraca",
+  "name": "fintellect",
   "version": "0.2.0",
   "description": "SME finance copilot: financial statements, health dashboard, monthly and 13-week cash forecasts built from a small business's own records.",
   "type": "module",
@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node src/server/index.js",
-    "dev": "NERACA_SECRET=dev-secret-change-me-0123 node --watch src/server/index.js",
+    "dev": "FINTELLECT_SECRET=dev-secret-change-me-0123 node --watch src/server/index.js",
     "test": "node --test \"test/**/*.test.js\"",
     "build:data": "node src/data/export-bootstrap.js"
   },

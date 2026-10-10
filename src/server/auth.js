@@ -6,7 +6,7 @@
 
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-export const SESSION_COOKIE = "neraca_session";
+export const SESSION_COOKIE = "fintellect_session";
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
 
 export const ROLE_CAPS = {

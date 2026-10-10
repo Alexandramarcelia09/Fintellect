@@ -9,7 +9,7 @@ import { getRepo } from "./helpers.js";
 
 let server, base, varDir;
 before(async () => {
-  varDir = mkdtempSync(join(tmpdir(), "neraca-test-"));
+  varDir = mkdtempSync(join(tmpdir(), "fintellect-test-"));
   server = createServer(createApp({ repo: getRepo(), secret: "test-secret-0123456789", varDir, demoPasscode: "pass-1234", loginLimitPerMinute: 1000 }));
   await new Promise((r) => server.listen(0, r));
   base = `http://127.0.0.1:${server.address().port}`;
@@ -41,8 +41,8 @@ test("a forged or tampered session cookie is rejected", async () => {
   const good = await login("U01");
   const [payload, sig] = good.split("=")[1].split(".");
   const forged = Buffer.from(JSON.stringify({ uid: "U90", exp: Date.now() + 1e6 })).toString("base64url");
-  assert.equal((await call("/api/me", { cookie: `neraca_session=${forged}.${sig}` })).status, 401);
-  assert.equal((await call("/api/me", { cookie: `neraca_session=${payload}.AAAA` })).status, 401);
+  assert.equal((await call("/api/me", { cookie: `fintellect_session=${forged}.${sig}` })).status, 401);
+  assert.equal((await call("/api/me", { cookie: `fintellect_session=${payload}.AAAA` })).status, 401);
 });
 
 test("the owner of B001 gets B001's data and nothing from B002", async () => {
@@ -144,7 +144,7 @@ test("session cookies are HttpOnly and SameSite=Strict", async () => {
 });
 
 test("sign-in attempts are rate limited", async () => {
-  const dir = mkdtempSync(join(tmpdir(), "neraca-rl-"));
+  const dir = mkdtempSync(join(tmpdir(), "fintellect-rl-"));
   const s2 = createServer(createApp({ repo: getRepo(), secret: "test-secret-0123456789", varDir: dir, demoPasscode: "pass-1234", loginLimitPerMinute: 3 }));
   await new Promise((r) => s2.listen(0, r));
   const url = `http://127.0.0.1:${s2.address().port}/api/login`;
