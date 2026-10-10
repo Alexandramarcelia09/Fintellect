@@ -1,0 +1,10 @@
+business_id,obligation_id,tax_type,period,due_date,amount,basis,status
+B001,GST-2025Q1,GST,2025 Q1,2025-04-30,11480.0,brought forward (pre-dataset quarter),paid
+B001,GST-2025Q2,GST,2025 Q2,2025-07-31,14508.75,"output 21,866.98 - input 7,358.23",paid
+B001,GST-2025Q3,GST,2025 Q3,2025-10-31,14858.36,"output 22,392.80 - input 7,534.44",paid
+B001,GST-2025Q4,GST,2025 Q4,2026-01-30,15916.44,"output 24,463.45 - input 8,547.01",paid
+B001,GST-2026Q1,GST,2026 Q1,2026-04-30,14152.26,"output 21,239.65 - input 7,087.39",paid
+B001,GST-2026Q2,GST,2026 Q2,2026-07-31,14122.12,"output 22,796.49 - input 8,674.37",paid
+B001,GST-2026Q3,GST,2026 Q3,2026-10-31,14021.4,"output 23,691.40 - input 9,670.00",due
+B001,CIT-YA2025,Corporate income tax,YA2025,2025-11-28,9800.0,assessed,paid
+B001,CIT-YA2026,Corporate income tax,YA2026,2026-11-30,11400.0,estimated chargeable income,due

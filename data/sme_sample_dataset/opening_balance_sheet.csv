@@ -1,0 +1,12 @@
+business_id,as_of,section,account_code,line_item,amount
+B001,2025-03-31,Assets,1000,Cash at bank,59088.11
+B001,2025-03-31,Assets,1100,Accounts receivable,25032.14
+B001,2025-03-31,Assets,1200,Inventory,9764.72
+B001,2025-03-31,Assets,1300,Rental deposit,29400.0
+B001,2025-03-31,Assets,1500,Equipment & fit-out (net book value),122666.67
+B001,2025-03-31,Liabilities,2000,Accounts payable,21524.0
+B001,2025-03-31,Liabilities,2100,GST payable (2025 Q1),11480.0
+B001,2025-03-31,Liabilities,2200,CPF payable (Mar 2025),9583.0
+B001,2025-03-31,Liabilities,2300,Term loan LN-001,111060.92
+B001,2025-03-31,Equity,3000,Owner capital,60000.0
+B001,2025-03-31,Equity,3200,Retained earnings (balancing),32303.72

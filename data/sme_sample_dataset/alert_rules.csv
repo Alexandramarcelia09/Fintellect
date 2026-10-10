@@ -1,0 +1,10 @@
+business_id,alert_id,type,rule,priority
+B001,AL-01,threshold,"Projected bank balance < min_cash_buffer (30,000) in any of next 13 weeks",high
+B001,AL-02,shortfall,Projected bank balance < 0 in any of next 13 weeks,critical
+B001,AL-03,runway,Cash runway < 3 months,high
+B001,AL-04,receivable,"Invoice > 30 days past due, or customer balance > credit limit",medium
+B001,AL-05,receivable_trend,Customer's average days-late increased > 50% vs prior 6 months,medium
+B001,AL-06,anomaly,Expense category in a month > 2x its trailing 6-month average,medium
+B001,AL-07,duplicate,"Two outgoing payments to same payee, same amount/reference within 10 days",high
+B001,AL-08,reconciliation,Unmatched bank or ledger item older than 7 days,low
+B001,AL-09,margin,Gross margin falls > 3 points vs trailing 3-month average,medium

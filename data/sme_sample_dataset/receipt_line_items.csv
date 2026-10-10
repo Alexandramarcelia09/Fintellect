@@ -1,0 +1,327 @@
+business_id,receipt_id,line_no,description,quantity,unit_price,line_total
+B001,R-0001,1,A4 paper ream,2,6.9,13.8
+B001,R-0002,1,Pipe fitting,1,6.5,6.5
+B001,R-0002,2,LED bulb,1,5.9,5.9
+B001,R-0002,3,Cable ties,2,3.5,7.0
+B001,R-0002,4,Mop head,4,7.9,31.6
+B001,R-0002,5,Sealant,1,8.9,8.9
+B001,R-0003,1,Butter 454g,3,8.5,25.5
+B001,R-0003,2,Fresh cream 1L,3,9.2,27.6
+B001,R-0003,3,Strawberries 250g,4,5.5,22.0
+B001,R-0003,4,Eggs 30pc,1,7.9,7.9
+B001,R-0003,5,Sugar 2kg,1,3.9,3.9
+B001,R-0004,1,Next-day delivery,2,9.5,19.0
+B001,R-0004,2,Same-day delivery,4,18.0,72.0
+B001,R-0005,1,Butter 454g,2,8.5,17.0
+B001,R-0006,1,Eggs 30pc,1,7.9,7.9
+B001,R-0006,2,Strawberries 250g,2,5.5,11.0
+B001,R-0006,3,Butter 454g,3,8.5,25.5
+B001,R-0006,4,Fresh cream 1L,1,9.2,9.2
+B001,R-0006,5,Lemons 1kg,1,4.8,4.8
+B001,R-0007,1,Next-day delivery,3,9.5,28.5
+B001,R-0007,2,Same-day delivery,3,18.0,54.0
+B001,R-0008,1,Sealant,3,8.9,26.7
+B001,R-0008,2,Mop head,1,7.9,7.9
+B001,R-0008,3,LED bulb,1,5.9,5.9
+B001,R-0008,4,Cable ties,4,3.5,14.0
+B001,R-0008,5,Pipe fitting,3,6.5,19.5
+B001,R-0009,1,Next-day delivery,3,9.5,28.5
+B001,R-0009,2,Same-day delivery,4,18.0,72.0
+B001,R-0010,1,Dish detergent 5L,4,14.9,59.6
+B001,R-0010,2,Gloves box,2,9.9,19.8
+B001,R-0011,1,Butter 454g,2,8.5,17.0
+B001,R-0011,2,Strawberries 250g,1,5.5,5.5
+B001,R-0011,3,Lemons 1kg,1,4.8,4.8
+B001,R-0011,4,Sugar 2kg,3,3.9,11.7
+B001,R-0011,5,Eggs 30pc,3,7.9,23.7
+B001,R-0012,1,Fresh cream 1L,2,9.2,18.4
+B001,R-0013,1,Sugar 2kg,1,3.9,3.9
+B001,R-0013,2,Eggs 30pc,2,7.9,15.8
+B001,R-0013,3,Butter 454g,4,8.5,34.0
+B001,R-0014,1,Strawberries 250g,2,5.5,11.0
+B001,R-0014,2,Fresh cream 1L,2,9.2,18.4
+B001,R-0015,1,Pipe fitting,2,6.5,13.0
+B001,R-0016,1,A4 paper ream,3,6.9,20.7
+B001,R-0016,2,Marker set,4,8.5,34.0
+B001,R-0016,3,Receipt rolls x10,2,18.0,36.0
+B001,R-0017,1,A4 paper ream,1,6.9,6.9
+B001,R-0018,1,Next-day delivery,2,9.5,19.0
+B001,R-0018,2,Same-day delivery,3,18.0,54.0
+B001,R-0019,1,Lemons 1kg,1,4.8,4.8
+B001,R-0019,2,Eggs 30pc,1,7.9,7.9
+B001,R-0019,3,Butter 454g,3,8.5,25.5
+B001,R-0019,4,Fresh cream 1L,2,9.2,18.4
+B001,R-0019,5,Strawberries 250g,1,5.5,5.5
+B001,R-0020,1,Strawberries 250g,4,5.5,22.0
+B001,R-0021,1,Fresh cream 1L,1,9.2,9.2
+B001,R-0021,2,Eggs 30pc,4,7.9,31.6
+B001,R-0021,3,Strawberries 250g,3,5.5,16.5
+B001,R-0021,4,Lemons 1kg,2,4.8,9.6
+B001,R-0021,5,Butter 454g,3,8.5,25.5
+B001,R-0022,1,A4 paper ream,1,6.9,6.9
+B001,R-0022,2,Marker set,1,8.5,8.5
+B001,R-0023,1,Cable ties,2,3.5,7.0
+B001,R-0023,2,LED bulb,3,5.9,17.7
+B001,R-0023,3,Mop head,4,7.9,31.6
+B001,R-0024,1,Gloves box,1,9.9,9.9
+B001,R-0024,2,Paper towels,4,12.8,51.2
+B001,R-0024,3,Dish detergent 5L,4,14.9,59.6
+B001,R-0024,4,Sanitiser 5L,1,22.5,22.5
+B001,R-0025,1,Labels,1,5.9,5.9
+B001,R-0025,2,Marker set,4,8.5,34.0
+B001,R-0025,3,A4 paper ream,3,6.9,20.7
+B001,R-0026,1,Lemons 1kg,3,4.8,14.4
+B001,R-0027,1,Dish detergent 5L,3,14.9,44.7
+B001,R-0027,2,Gloves box,1,9.9,9.9
+B001,R-0027,3,Paper towels,3,12.8,38.4
+B001,R-0027,4,Sanitiser 5L,3,22.5,67.5
+B001,R-0028,1,Sealant,2,8.9,17.8
+B001,R-0028,2,Cable ties,3,3.5,10.5
+B001,R-0028,3,Pipe fitting,2,6.5,13.0
+B001,R-0029,1,Eggs 30pc,2,7.9,15.8
+B001,R-0029,2,Strawberries 250g,1,5.5,5.5
+B001,R-0029,3,Fresh cream 1L,2,9.2,18.4
+B001,R-0029,4,Butter 454g,4,8.5,34.0
+B001,R-0030,1,Mop head,1,7.9,7.9
+B001,R-0030,2,LED bulb,3,5.9,17.7
+B001,R-0030,3,Sealant,4,8.9,35.6
+B001,R-0031,1,Paper towels,2,12.8,25.6
+B001,R-0032,1,Marker set,4,8.5,34.0
+B001,R-0032,2,A4 paper ream,1,6.9,6.9
+B001,R-0032,3,Receipt rolls x10,2,18.0,36.0
+B001,R-0032,4,Labels,3,5.9,17.7
+B001,R-0033,1,Marker set,2,8.5,17.0
+B001,R-0034,1,Gloves box,2,9.9,19.8
+B001,R-0035,1,Paper towels,3,12.8,38.4
+B001,R-0036,1,Butter 454g,2,8.5,17.0
+B001,R-0036,2,Strawberries 250g,1,5.5,5.5
+B001,R-0036,3,Lemons 1kg,1,4.8,4.8
+B001,R-0036,4,Sugar 2kg,2,3.9,7.8
+B001,R-0037,1,Strawberries 250g,4,5.5,22.0
+B001,R-0037,2,Fresh cream 1L,4,9.2,36.8
+B001,R-0037,3,Lemons 1kg,4,4.8,19.2
+B001,R-0038,1,Mop head,2,7.9,15.8
+B001,R-0038,2,LED bulb,3,5.9,17.7
+B001,R-0038,3,Sealant,3,8.9,26.7
+B001,R-0038,4,Cable ties,4,3.5,14.0
+B001,R-0038,5,Pipe fitting,2,6.5,13.0
+B001,R-0039,1,Fresh cream 1L,3,9.2,27.6
+B001,R-0039,2,Butter 454g,2,8.5,17.0
+B001,R-0040,1,Dish detergent 5L,2,14.9,29.8
+B001,R-0040,2,Sanitiser 5L,4,22.5,90.0
+B001,R-0041,1,Gloves box,2,9.9,19.8
+B001,R-0041,2,Paper towels,1,12.8,12.8
+B001,R-0041,3,Dish detergent 5L,3,14.9,44.7
+B001,R-0041,4,Sanitiser 5L,1,22.5,22.5
+B001,R-0042,1,Sanitiser 5L,4,22.5,90.0
+B001,R-0042,2,Paper towels,2,12.8,25.6
+B001,R-0042,3,Dish detergent 5L,3,14.9,44.7
+B001,R-0043,1,A4 paper ream,3,6.9,20.7
+B001,R-0043,2,Marker set,4,8.5,34.0
+B001,R-0043,3,Labels,3,5.9,17.7
+B001,R-0044,1,Sugar 2kg,3,3.9,11.7
+B001,R-0044,2,Fresh cream 1L,2,9.2,18.4
+B001,R-0044,3,Lemons 1kg,1,4.8,4.8
+B001,R-0045,1,Butter 454g,1,8.5,8.5
+B001,R-0045,2,Strawberries 250g,4,5.5,22.0
+B001,R-0046,1,Eggs 30pc,4,7.9,31.6
+B001,R-0046,2,Lemons 1kg,1,4.8,4.8
+B001,R-0046,3,Sugar 2kg,3,3.9,11.7
+B001,R-0046,4,Butter 454g,1,8.5,8.5
+B001,R-0046,5,Fresh cream 1L,3,9.2,27.6
+B001,R-0047,1,Fresh cream 1L,1,9.2,9.2
+B001,R-0047,2,Butter 454g,3,8.5,25.5
+B001,R-0047,3,Lemons 1kg,4,4.8,19.2
+B001,R-0048,1,Receipt rolls x10,1,18.0,18.0
+B001,R-0048,2,Marker set,3,8.5,25.5
+B001,R-0048,3,A4 paper ream,4,6.9,27.6
+B001,R-0048,4,Labels,2,5.9,11.8
+B001,R-0049,1,Marker set,4,8.5,34.0
+B001,R-0049,2,A4 paper ream,1,6.9,6.9
+B001,R-0049,3,Receipt rolls x10,1,18.0,18.0
+B001,R-0049,4,Labels,3,5.9,17.7
+B001,R-0050,1,Eggs 30pc,1,7.9,7.9
+B001,R-0050,2,Fresh cream 1L,4,9.2,36.8
+B001,R-0050,3,Strawberries 250g,4,5.5,22.0
+B001,R-0050,4,Lemons 1kg,3,4.8,14.4
+B001,R-0050,5,Sugar 2kg,1,3.9,3.9
+B001,R-0051,1,Sealant,3,8.9,26.7
+B001,R-0051,2,Mop head,4,7.9,31.6
+B001,R-0051,3,Pipe fitting,1,6.5,6.5
+B001,R-0051,4,LED bulb,2,5.9,11.8
+B001,R-0052,1,Fresh cream 1L,4,9.2,36.8
+B001,R-0053,1,Lemons 1kg,1,4.8,4.8
+B001,R-0053,2,Fresh cream 1L,4,9.2,36.8
+B001,R-0053,3,Eggs 30pc,3,7.9,23.7
+B001,R-0053,4,Sugar 2kg,2,3.9,7.8
+B001,R-0054,1,Sanitiser 5L,2,22.5,45.0
+B001,R-0055,1,Strawberries 250g,4,5.5,22.0
+B001,R-0055,2,Butter 454g,3,8.5,25.5
+B001,R-0055,3,Eggs 30pc,3,7.9,23.7
+B001,R-0055,4,Fresh cream 1L,3,9.2,27.6
+B001,R-0056,1,Marker set,2,8.5,17.0
+B001,R-0056,2,Receipt rolls x10,1,18.0,18.0
+B001,R-0056,3,A4 paper ream,3,6.9,20.7
+B001,R-0056,4,Labels,2,5.9,11.8
+B001,R-0057,1,Next-day delivery,1,9.5,9.5
+B001,R-0057,2,Same-day delivery,2,18.0,36.0
+B001,R-0058,1,Eggs 30pc,4,7.9,31.6
+B001,R-0058,2,Lemons 1kg,4,4.8,19.2
+B001,R-0058,3,Strawberries 250g,3,5.5,16.5
+B001,R-0058,4,Fresh cream 1L,4,9.2,36.8
+B001,R-0058-B,1,Eggs 30pc,4,7.9,31.6
+B001,R-0058-B,2,Lemons 1kg,4,4.8,19.2
+B001,R-0058-B,3,Strawberries 250g,3,5.5,16.5
+B001,R-0058-B,4,Fresh cream 1L,4,9.2,36.8
+B001,R-0059,1,Next-day delivery,2,9.5,19.0
+B001,R-0060,1,Same-day delivery,4,18.0,72.0
+B001,R-0060,2,Next-day delivery,1,9.5,9.5
+B001,R-0061,1,Next-day delivery,3,9.5,28.5
+B001,R-0061,2,Same-day delivery,2,18.0,36.0
+B001,R-0062,1,Butter 454g,3,8.5,25.5
+B001,R-0062,2,Lemons 1kg,1,4.8,4.8
+B001,R-0062,3,Strawberries 250g,4,5.5,22.0
+B001,R-0063,1,Sanitiser 5L,3,22.5,67.5
+B001,R-0063,2,Dish detergent 5L,4,14.9,59.6
+B001,R-0063,3,Paper towels,3,12.8,38.4
+B001,R-0063,4,Gloves box,3,9.9,29.7
+B001,R-0064,1,Next-day delivery,4,9.5,38.0
+B001,R-0064,2,Same-day delivery,2,18.0,36.0
+B001,R-0065,1,Eggs 30pc,3,7.9,23.7
+B001,R-0065,2,Fresh cream 1L,1,9.2,9.2
+B001,R-0066,1,Gloves box,1,9.9,9.9
+B001,R-0067,1,Sugar 2kg,4,3.9,15.6
+B001,R-0067,2,Fresh cream 1L,4,9.2,36.8
+B001,R-0068,1,Sealant,2,8.9,17.8
+B001,R-0068,2,LED bulb,4,5.9,23.6
+B001,R-0068,3,Mop head,3,7.9,23.7
+B001,R-0068,4,Cable ties,1,3.5,3.5
+B001,R-0068,5,Pipe fitting,3,6.5,19.5
+B001,R-0069,1,Sugar 2kg,4,3.9,15.6
+B001,R-0069,2,Fresh cream 1L,1,9.2,9.2
+B001,R-0069,3,Eggs 30pc,2,7.9,15.8
+B001,R-0070,1,Next-day delivery,3,9.5,28.5
+B001,R-0071,1,Strawberries 250g,2,5.5,11.0
+B001,R-0072,1,Dish detergent 5L,2,14.9,29.8
+B001,R-0072,2,Paper towels,3,12.8,38.4
+B001,R-0073,1,Dish detergent 5L,2,14.9,29.8
+B001,R-0073,2,Sanitiser 5L,3,22.5,67.5
+B001,R-0073,3,Gloves box,1,9.9,9.9
+B001,R-0074,1,Paper towels,3,12.8,38.4
+B001,R-0074,2,Dish detergent 5L,3,14.9,44.7
+B001,R-0074,3,Gloves box,3,9.9,29.7
+B001,R-0074,4,Sanitiser 5L,3,22.5,67.5
+B001,R-0075,1,Lemons 1kg,2,4.8,9.6
+B001,R-0075,2,Fresh cream 1L,2,9.2,18.4
+B001,R-0075,3,Strawberries 250g,2,5.5,11.0
+B001,R-0075,4,Eggs 30pc,2,7.9,15.8
+B001,R-0075,5,Sugar 2kg,4,3.9,15.6
+B001,R-0076,1,Eggs 30pc,1,7.9,7.9
+B001,R-0076,2,Fresh cream 1L,1,9.2,9.2
+B001,R-0076,3,Sugar 2kg,2,3.9,7.8
+B001,R-0076,4,Butter 454g,2,8.5,17.0
+B001,R-0077,1,Gloves box,3,9.9,29.7
+B001,R-0077,2,Sanitiser 5L,4,22.5,90.0
+B001,R-0077,3,Dish detergent 5L,3,14.9,44.7
+B001,R-0078,1,LED bulb,4,5.9,23.6
+B001,R-0078,2,Sealant,4,8.9,35.6
+B001,R-0078,3,Cable ties,4,3.5,14.0
+B001,R-0079,1,Marker set,4,8.5,34.0
+B001,R-0080,1,Lemons 1kg,2,4.8,9.6
+B001,R-0080,2,Butter 454g,2,8.5,17.0
+B001,R-0080,3,Eggs 30pc,2,7.9,15.8
+B001,R-0081,1,Dish detergent 5L,2,14.9,29.8
+B001,R-0081,2,Gloves box,1,9.9,9.9
+B001,R-0082,1,Sugar 2kg,2,3.9,7.8
+B001,R-0083,1,Butter 454g,4,8.5,34.0
+B001,R-0083,2,Lemons 1kg,2,4.8,9.6
+B001,R-0083,3,Strawberries 250g,2,5.5,11.0
+B001,R-0083,4,Sugar 2kg,4,3.9,15.6
+B001,R-0084,1,Lemons 1kg,1,4.8,4.8
+B001,R-0085,1,Butter 454g,1,8.5,8.5
+B001,R-0085,2,Sugar 2kg,1,3.9,3.9
+B001,R-0085,3,Strawberries 250g,4,5.5,22.0
+B001,R-0085,4,Lemons 1kg,3,4.8,14.4
+B001,R-0085,5,Fresh cream 1L,3,9.2,27.6
+B001,R-0086,1,Fresh cream 1L,1,9.2,9.2
+B001,R-0086,2,Butter 454g,3,8.5,25.5
+B001,R-0086,3,Strawberries 250g,2,5.5,11.0
+B001,R-0086,4,Eggs 30pc,2,7.9,15.8
+B001,R-0087,1,Eggs 30pc,1,7.9,7.9
+B001,R-0088,1,Eggs 30pc,1,7.9,7.9
+B001,R-0088,2,Strawberries 250g,4,5.5,22.0
+B001,R-0088,3,Butter 454g,2,8.5,17.0
+B001,R-0089,1,Pipe fitting,3,6.5,19.5
+B001,R-0089,2,Mop head,2,7.9,15.8
+B001,R-0089,3,LED bulb,4,5.9,23.6
+B001,R-0089,4,Cable ties,3,3.5,10.5
+B001,R-0090,1,Labels,2,5.9,11.8
+B001,R-0091,1,Butter 454g,1,8.5,8.5
+B001,R-0091,2,Strawberries 250g,1,5.5,5.5
+B001,R-0092,1,Dish detergent 5L,2,14.9,29.8
+B001,R-0092,2,Paper towels,1,12.8,12.8
+B001,R-0092,3,Sanitiser 5L,1,22.5,22.5
+B001,R-0092,4,Gloves box,2,9.9,19.8
+B001,R-0093,1,Sanitiser 5L,3,22.5,67.5
+B001,R-0093,2,Paper towels,4,12.8,51.2
+B001,R-0093,3,Dish detergent 5L,1,14.9,14.9
+B001,R-0093,4,Gloves box,3,9.9,29.7
+B001,R-0094,1,Sugar 2kg,2,3.9,7.8
+B001,R-0094,2,Fresh cream 1L,1,9.2,9.2
+B001,R-0094,3,Butter 454g,1,8.5,8.5
+B001,R-0094,4,Strawberries 250g,2,5.5,11.0
+B001,R-0094,5,Lemons 1kg,4,4.8,19.2
+B001,R-0095,1,Sugar 2kg,2,3.9,7.8
+B001,R-0095,2,Eggs 30pc,3,7.9,23.7
+B001,R-0095,3,Fresh cream 1L,2,9.2,18.4
+B001,R-0095,4,Strawberries 250g,1,5.5,5.5
+B001,R-0095,5,Lemons 1kg,2,4.8,9.6
+B001,R-0096,1,Dish detergent 5L,3,14.9,44.7
+B001,R-0096,2,Gloves box,1,9.9,9.9
+B001,R-0096,3,Paper towels,1,12.8,12.8
+B001,R-0097,1,LED bulb,3,5.9,17.7
+B001,R-0097,2,Mop head,2,7.9,15.8
+B001,R-0097,3,Cable ties,1,3.5,3.5
+B001,R-0097,4,Pipe fitting,1,6.5,6.5
+B001,R-0097,5,Sealant,1,8.9,8.9
+B001,R-0098,1,Sanitiser 5L,3,22.5,67.5
+B001,R-0098,2,Dish detergent 5L,3,14.9,44.7
+B001,R-0099,1,Butter 454g,2,8.5,17.0
+B001,R-0099,2,Strawberries 250g,1,5.5,5.5
+B001,R-0100,1,Same-day delivery,1,18.0,18.0
+B001,R-0100,2,Next-day delivery,1,9.5,9.5
+B001,R-0101,1,Eggs 30pc,3,7.9,23.7
+B001,R-0101,2,Lemons 1kg,3,4.8,14.4
+B001,R-0101,3,Strawberries 250g,2,5.5,11.0
+B001,R-0102,1,Dish detergent 5L,3,14.9,44.7
+B001,R-0102,2,Paper towels,1,12.8,12.8
+B001,R-0102,3,Gloves box,2,9.9,19.8
+B001,R-0102,4,Sanitiser 5L,4,22.5,90.0
+B001,R-0103,1,Same-day delivery,1,18.0,18.0
+B001,R-0103,2,Next-day delivery,2,9.5,19.0
+B001,R-0104,1,Strawberries 250g,3,5.5,16.5
+B001,R-0104,2,Sugar 2kg,1,3.9,3.9
+B001,R-0104,3,Lemons 1kg,3,4.8,14.4
+B001,R-0105,1,Fresh cream 1L,4,9.2,36.8
+B001,R-0105,2,Sugar 2kg,4,3.9,15.6
+B001,R-0105,3,Butter 454g,2,8.5,17.0
+B001,R-0105,4,Lemons 1kg,1,4.8,4.8
+B001,R-0106,1,Strawberries 250g,4,5.5,22.0
+B001,R-0106,2,Lemons 1kg,1,4.8,4.8
+B001,R-0106,3,Fresh cream 1L,2,9.2,18.4
+B001,R-0106,4,Sugar 2kg,2,3.9,7.8
+B001,R-0107,1,Fresh cream 1L,4,9.2,36.8
+B001,R-0107,2,Eggs 30pc,1,7.9,7.9
+B001,R-0107,3,Sugar 2kg,1,3.9,3.9
+B001,R-0107,4,Lemons 1kg,1,4.8,4.8
+B001,R-0107,5,Strawberries 250g,1,5.5,5.5
+B001,R-0108,1,Eggs 30pc,1,7.9,7.9
+B001,R-0108,2,Fresh cream 1L,2,9.2,18.4
+B001,R-0108,3,Lemons 1kg,2,4.8,9.6
+B001,R-0108,4,Sugar 2kg,2,3.9,7.8
+B001,R-0108,5,Strawberries 250g,4,5.5,22.0
+B001,R-0109,1,Eggs 30pc,3,7.9,23.7
+B001,R-0109,2,Lemons 1kg,2,4.8,9.6
+B001,R-0109,3,Fresh cream 1L,3,9.2,27.6
+B001,R-0109,4,Sugar 2kg,1,3.9,3.9
+B001,R-0109,5,Butter 454g,2,8.5,17.0

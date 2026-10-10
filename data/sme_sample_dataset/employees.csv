@@ -1,0 +1,11 @@
+business_id,employee_id,name,role,employment_type,base_monthly_salary,cpf_applicable,start_date,end_date
+B001,E01,Marcus Lee,Cafe manager,Full-time,4800,True,2022-06-01,
+B001,E02,Siti Rahman,Head baker,Full-time,4200,True,2022-06-01,
+B001,E03,Arjun Nair,Baker,Full-time,3000,True,2023-02-01,
+B001,E04,Goh Mei Ling,Barista,Full-time,2700,True,2022-08-01,
+B001,E05,Ryan Tay,Barista,Full-time,2700,True,2024-03-01,
+B001,E06,Nur Aisyah,Kitchen crew,Full-time,2500,True,2023-06-01,
+B001,E07,Jason Ong,Service crew,Full-time,2300,True,2023-09-01,2026-01-31
+B001,E08,Priya Menon,Service crew,Full-time,2300,True,2024-05-01,
+B001,E09,Ethan Chua,Service crew,Part-time,1400,True,2025-01-01,
+B001,E10,Hannah Lim,Service crew,Full-time,2400,True,2026-06-01,

@@ -1,0 +1,3 @@
+business_id,account_id,bank_name,account_type,account_no_masked,currency,debit_card_last4,opening_date
+B001,ACC-OPS,Lion City Bank (fictional),Business current account,XXX-XXX821-4,SGD,4417,2022-06-01
+B002,ACC-B002,Harbour Trust Bank (fictional),Business current account,XXX-XXX330-9,SGD,9021,2023-02-01

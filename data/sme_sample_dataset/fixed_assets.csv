@@ -1,0 +1,6 @@
+business_id,asset_id,description,category,purchase_date,cost,useful_life_years,method,status
+B001,FA-01,Espresso machine (2-group),Equipment,2022-06-01,18000,5,straight-line,in use
+B001,FA-02,Deck oven (3-deck),Equipment,2022-06-01,14000,5,straight-line,"in use - nearing end of life, replacement planned Nov 2026"
+B001,FA-03,Kitchen fit-out & renovation,Fit-out,2024-10-01,92000,5,straight-line,in use
+B001,FA-04,Blast chiller,Equipment,2024-10-01,28000,7,straight-line,in use
+B001,FA-05,Commercial coffee grinder,Equipment,2025-08-18,3200,5,straight-line,in use

@@ -1,0 +1,77 @@
+business_id,snapshot_date,item_group,value_at_cost
+B001,2025-03-31,"Dry ingredients (flour, sugar)",3539.33
+B001,2025-03-31,Dairy & perishables,1487.32
+B001,2025-03-31,Coffee beans,2701.73
+B001,2025-03-31,Packaging,2036.34
+B001,2025-04-30,"Dry ingredients (flour, sugar)",3916.84
+B001,2025-04-30,Dairy & perishables,1436.86
+B001,2025-04-30,Coffee beans,2684.37
+B001,2025-04-30,Packaging,2050.84
+B001,2025-05-31,"Dry ingredients (flour, sugar)",3894.2
+B001,2025-05-31,Dairy & perishables,1532.21
+B001,2025-05-31,Coffee beans,3560.01
+B001,2025-05-31,Packaging,2527.96
+B001,2025-06-30,"Dry ingredients (flour, sugar)",3147.39
+B001,2025-06-30,Dairy & perishables,1466.39
+B001,2025-06-30,Coffee beans,3078.98
+B001,2025-06-30,Packaging,1870.51
+B001,2025-07-31,"Dry ingredients (flour, sugar)",3860.24
+B001,2025-07-31,Dairy & perishables,1546.47
+B001,2025-07-31,Coffee beans,3488.11
+B001,2025-07-31,Packaging,2250.84
+B001,2025-08-31,"Dry ingredients (flour, sugar)",3891.98
+B001,2025-08-31,Dairy & perishables,1724.33
+B001,2025-08-31,Coffee beans,2961.89
+B001,2025-08-31,Packaging,2015.79
+B001,2025-09-30,"Dry ingredients (flour, sugar)",4090.47
+B001,2025-09-30,Dairy & perishables,1846.67
+B001,2025-09-30,Coffee beans,3169.99
+B001,2025-09-30,Packaging,2149.08
+B001,2025-10-31,"Dry ingredients (flour, sugar)",4119.69
+B001,2025-10-31,Dairy & perishables,1557.03
+B001,2025-10-31,Coffee beans,2789.41
+B001,2025-10-31,Packaging,2313.49
+B001,2025-11-30,"Dry ingredients (flour, sugar)",4604.95
+B001,2025-11-30,Dairy & perishables,1637.66
+B001,2025-11-30,Coffee beans,3865.45
+B001,2025-11-30,Packaging,2423.84
+B001,2025-12-31,"Dry ingredients (flour, sugar)",4916.77
+B001,2025-12-31,Dairy & perishables,1730.97
+B001,2025-12-31,Coffee beans,3441.74
+B001,2025-12-31,Packaging,3058.94
+B001,2026-01-31,"Dry ingredients (flour, sugar)",3526.92
+B001,2026-01-31,Dairy & perishables,1546.33
+B001,2026-01-31,Coffee beans,2942.54
+B001,2026-01-31,Packaging,2387.08
+B001,2026-02-28,"Dry ingredients (flour, sugar)",3066.08
+B001,2026-02-28,Dairy & perishables,1530.06
+B001,2026-02-28,Coffee beans,2463.62
+B001,2026-02-28,Packaging,2185.25
+B001,2026-03-31,"Dry ingredients (flour, sugar)",3425.45
+B001,2026-03-31,Dairy & perishables,1888.95
+B001,2026-03-31,Coffee beans,2960.89
+B001,2026-03-31,Packaging,2045.35
+B001,2026-04-30,"Dry ingredients (flour, sugar)",4152.68
+B001,2026-04-30,Dairy & perishables,1651.91
+B001,2026-04-30,Coffee beans,2963.33
+B001,2026-04-30,Packaging,2495.88
+B001,2026-05-31,"Dry ingredients (flour, sugar)",3862.57
+B001,2026-05-31,Dairy & perishables,1902.83
+B001,2026-05-31,Coffee beans,3697.01
+B001,2026-05-31,Packaging,2380.51
+B001,2026-06-30,"Dry ingredients (flour, sugar)",3427.56
+B001,2026-06-30,Dairy & perishables,1519.62
+B001,2026-06-30,Coffee beans,2983.25
+B001,2026-06-30,Packaging,2314.19
+B001,2026-07-31,"Dry ingredients (flour, sugar)",3988.03
+B001,2026-07-31,Dairy & perishables,1456.25
+B001,2026-07-31,Coffee beans,3318.34
+B001,2026-07-31,Packaging,2598.99
+B001,2026-08-31,"Dry ingredients (flour, sugar)",3553.12
+B001,2026-08-31,Dairy & perishables,1928.96
+B001,2026-08-31,Coffee beans,3312.95
+B001,2026-08-31,Packaging,2360.76
+B001,2026-09-30,"Dry ingredients (flour, sugar)",4530.44
+B001,2026-09-30,Dairy & perishables,1633.68
+B001,2026-09-30,Coffee beans,3503.53
+B001,2026-09-30,Packaging,2326.04

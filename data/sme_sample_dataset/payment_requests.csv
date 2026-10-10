@@ -1,0 +1,13 @@
+business_id,request_id,bill_id,payee_name,amount,payee_bank,payee_account,scheduled_date,requested_by,requested_at,status
+B001,PAYREQ-001,BILL-00203,Golden Grain Flour Mill,3622.75,Harbour Trust Bank,612-008812-7,2026-10-02,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-002,BILL-00274,QuickFix Kitchen Supplies,4850.5,,,2026-10-03,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-003,BILL-00271,Fresh Farm Produce Pte Ltd,2376.2,Lion City Bank,501-223344-0,2026-10-05,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-004,BILL-00272,Fresh Farm Produce Pte Ltd,2376.2,Lion City Bank,501-223344-0,2026-10-05,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-005,BILL-00266,Highland Coffee Roasters,6291.02,Lion City Bank,501-998120-3,2026-10-07,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-006,BILL-00163,Dairy Direct SG,1417.92,Straits Mutual Bank,330-441209-8,2026-10-08,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-007,BILL-00273,Dairy Direct SG,1188.1,Harbour Trust Bank,771-009812-3,2026-10-08,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-008,BILL-00275,Fresh Farm Produce Pte Ltd,2463.4,Lion City Bank,501-223344-0,2026-10-12,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-009,BILL-00204,Golden Grain Flour Mill,3627.6,Harbour Trust Bank,612-008812-7,2026-10-16,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-010,BILL-00267,PackRight Packaging,1196.51,Lion City Bank,501-556677-1,2026-10-21,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-011,BILL-00205,Golden Grain Flour Mill,3686.82,Harbour Trust Bank,612-008812-7,2026-10-30,U02,2026-09-30T17:20:00+08:00,pending_approval
+B001,PAYREQ-012,,ProBake Equipment Pte Ltd,7848.0,Lion City Bank,501-880045-6,2026-10-20,U02,2026-09-30T17:25:00+08:00,pending_approval

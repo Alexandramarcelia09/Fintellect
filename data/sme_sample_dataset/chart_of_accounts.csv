@@ -1,0 +1,32 @@
+business_id,account_code,account_name,account_type
+B001,1000,Cash at bank,Asset
+B001,1100,Accounts receivable,Asset
+B001,1200,Inventory,Asset
+B001,1300,Rental deposit,Asset
+B001,1500,Equipment & fit-out,Asset
+B001,2000,Accounts payable,Liability
+B001,2100,GST payable,Liability
+B001,2200,CPF payable,Liability
+B001,2300,Term loan,Liability
+B001,3000,Owner capital,Equity
+B001,3100,Owner drawings,Equity
+B001,3200,Retained earnings,Equity
+B001,4000,Cafe sales (POS),Revenue
+B001,4100,Catering & wholesale sales,Revenue
+B001,5000,COGS - food ingredients,COGS
+B001,5010,COGS - coffee beans,COGS
+B001,5020,COGS - dairy,COGS
+B001,5030,COGS - packaging,COGS
+B001,6000,Salaries,Operating expense
+B001,6010,CPF - employer,Operating expense
+B001,6100,Rent,Operating expense
+B001,6110,Utilities,Operating expense
+B001,6120,Telco & internet,Operating expense
+B001,6130,Software subscriptions,Operating expense
+B001,6140,Repairs & maintenance,Operating expense
+B001,6150,Marketing,Operating expense
+B001,6160,Insurance,Operating expense
+B001,6170,Bank & card fees,Operating expense
+B001,6180,"Sundry, supplies & delivery",Operating expense
+B001,7000,Interest expense,Finance cost
+B001,8000,Income tax,Tax

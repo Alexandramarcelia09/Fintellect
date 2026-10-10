@@ -1,0 +1,247 @@
+business_id,po_id,supplier_id,po_date,description,po_net_amount,status
+B001,PO-00001,S001,2025-02-28,Fresh produce weekly order,2141.49,closed
+B001,PO-00002,S004,2025-03-03,Milk & cream weekly order,1141.01,closed
+B001,PO-00003,S001,2025-03-07,Fresh produce weekly order,1916.62,closed
+B001,PO-00004,S004,2025-03-10,Milk & cream weekly order,1020.07,closed
+B001,PO-00005,S001,2025-03-14,Fresh produce weekly order,1758.91,closed
+B001,PO-00006,S004,2025-03-17,Milk & cream weekly order,1192.23,closed
+B001,PO-00007,S001,2025-03-21,Fresh produce weekly order,1720.57,closed
+B001,PO-00008,S004,2025-03-24,Milk & cream weekly order,924.8,closed
+B001,PO-00009,S001,2025-03-28,Fresh produce weekly order,1959.62,closed
+B001,PO-00010,S004,2025-03-31,Milk & cream weekly order,884.1,closed
+B001,PO-00011,S001,2025-04-04,Fresh produce weekly order,2222.19,closed
+B001,PO-00012,S004,2025-04-07,Milk & cream weekly order,1122.8,closed
+B001,PO-00013,S001,2025-04-11,Fresh produce weekly order,2010.17,closed
+B001,PO-00014,S004,2025-04-14,Milk & cream weekly order,931.61,closed
+B001,PO-00015,S001,2025-04-18,Fresh produce weekly order,1999.67,closed
+B001,PO-00016,S004,2025-04-21,Milk & cream weekly order,931.16,closed
+B001,PO-00017,S001,2025-04-25,Fresh produce weekly order,2005.46,closed
+B001,PO-00018,S004,2025-04-28,Milk & cream weekly order,935.96,closed
+B001,PO-00019,S001,2025-05-02,Fresh produce weekly order,2191.41,closed
+B001,PO-00020,S004,2025-05-05,Milk & cream weekly order,1240.64,closed
+B001,PO-00021,S001,2025-05-09,Fresh produce weekly order,2119.45,closed
+B001,PO-00022,S004,2025-05-12,Milk & cream weekly order,1115.51,closed
+B001,PO-00023,S001,2025-05-16,Fresh produce weekly order,2343.4,closed
+B001,PO-00024,S004,2025-05-19,Milk & cream weekly order,978.73,closed
+B001,PO-00025,S001,2025-05-23,Fresh produce weekly order,1876.13,closed
+B001,PO-00026,S004,2025-05-26,Milk & cream weekly order,1222.6,closed
+B001,PO-00027,S001,2025-05-30,Fresh produce weekly order,2149.3,closed
+B001,PO-00028,S004,2025-06-02,Milk & cream weekly order,1071.84,closed
+B001,PO-00029,S001,2025-06-06,Fresh produce weekly order,2005.7,closed
+B001,PO-00030,S004,2025-06-09,Milk & cream weekly order,1105.02,closed
+B001,PO-00031,S001,2025-06-13,Fresh produce weekly order,1773.39,closed
+B001,PO-00032,S004,2025-06-16,Milk & cream weekly order,1001.91,closed
+B001,PO-00033,S001,2025-06-20,Fresh produce weekly order,1670.95,closed
+B001,PO-00034,S004,2025-06-23,Milk & cream weekly order,1097.37,closed
+B001,PO-00035,S001,2025-06-27,Fresh produce weekly order,2193.35,closed
+B001,PO-00036,S004,2025-06-30,Milk & cream weekly order,1206.65,closed
+B001,PO-00037,S001,2025-07-04,Fresh produce weekly order,2087.99,closed
+B001,PO-00038,S004,2025-07-07,Milk & cream weekly order,1138.9,closed
+B001,PO-00039,S001,2025-07-11,Fresh produce weekly order,1683.95,closed
+B001,PO-00040,S004,2025-07-14,Milk & cream weekly order,1155.48,closed
+B001,PO-00041,S001,2025-07-18,Fresh produce weekly order,1714.45,closed
+B001,PO-00042,S004,2025-07-21,Milk & cream weekly order,1101.1,closed
+B001,PO-00043,S001,2025-07-25,Fresh produce weekly order,1856.62,closed
+B001,PO-00044,S004,2025-07-28,Milk & cream weekly order,1079.87,closed
+B001,PO-00045,S001,2025-08-01,Fresh produce weekly order,2231.87,closed
+B001,PO-00046,S004,2025-08-04,Milk & cream weekly order,1085.61,closed
+B001,PO-00047,S001,2025-08-08,Fresh produce weekly order,2416.66,closed
+B001,PO-00048,S004,2025-08-11,Milk & cream weekly order,1224.09,closed
+B001,PO-00049,S001,2025-08-15,Fresh produce weekly order,2296.38,closed
+B001,PO-00050,S004,2025-08-18,Milk & cream weekly order,1196.48,closed
+B001,PO-00051,S001,2025-08-22,Fresh produce weekly order,2255.18,closed
+B001,PO-00052,S004,2025-08-25,Milk & cream weekly order,1268.48,closed
+B001,PO-00053,S001,2025-08-29,Fresh produce weekly order,2161.36,closed
+B001,PO-00054,S004,2025-09-01,Milk & cream weekly order,1076.1,closed
+B001,PO-00055,S001,2025-09-05,Fresh produce weekly order,1811.66,closed
+B001,PO-00056,S004,2025-09-08,Milk & cream weekly order,1130.08,closed
+B001,PO-00057,S001,2025-09-12,Fresh produce weekly order,2181.13,closed
+B001,PO-00058,S004,2025-09-15,Milk & cream weekly order,960.8,closed
+B001,PO-00059,S001,2025-09-19,Fresh produce weekly order,2263.48,closed
+B001,PO-00060,S004,2025-09-22,Milk & cream weekly order,1226.27,closed
+B001,PO-00061,S001,2025-09-26,Fresh produce weekly order,2408.53,closed
+B001,PO-00062,S004,2025-09-29,Milk & cream weekly order,1250.49,closed
+B001,PO-00063,S001,2025-10-03,Fresh produce weekly order,2358.34,closed
+B001,PO-00064,S004,2025-10-06,Milk & cream weekly order,1111.05,closed
+B001,PO-00065,S001,2025-10-10,Fresh produce weekly order,2286.66,closed
+B001,PO-00066,S004,2025-10-13,Milk & cream weekly order,1094.65,closed
+B001,PO-00067,S001,2025-10-17,Fresh produce weekly order,1905.72,closed
+B001,PO-00068,S004,2025-10-20,Milk & cream weekly order,1210.44,closed
+B001,PO-00069,S001,2025-10-24,Fresh produce weekly order,2111.93,closed
+B001,PO-00070,S004,2025-10-27,Milk & cream weekly order,1134.7,closed
+B001,PO-00071,S001,2025-10-31,Fresh produce weekly order,2051.68,closed
+B001,PO-00072,S004,2025-11-03,Milk & cream weekly order,1138.59,closed
+B001,PO-00073,S001,2025-11-07,Fresh produce weekly order,2416.12,closed
+B001,PO-00074,S004,2025-11-10,Milk & cream weekly order,1005.11,closed
+B001,PO-00075,S001,2025-11-14,Fresh produce weekly order,2433.7,closed
+B001,PO-00076,S004,2025-11-17,Milk & cream weekly order,1226.6,closed
+B001,PO-00077,S001,2025-11-21,Fresh produce weekly order,2332.95,closed
+B001,PO-00078,S004,2025-11-24,Milk & cream weekly order,1332.76,closed
+B001,PO-00079,S001,2025-11-28,Fresh produce weekly order,2202.03,closed
+B001,PO-00080,S004,2025-12-01,Milk & cream weekly order,1218.2,closed
+B001,PO-00081,S001,2025-12-05,Fresh produce weekly order,2243.2,closed
+B001,PO-00082,S004,2025-12-08,Milk & cream weekly order,1392.69,closed
+B001,PO-00083,S001,2025-12-12,Fresh produce weekly order,2299.36,closed
+B001,PO-00084,S004,2025-12-15,Milk & cream weekly order,1451.33,closed
+B001,PO-00085,S001,2025-12-19,Fresh produce weekly order,2607.24,closed
+B001,PO-00086,S004,2025-12-22,Milk & cream weekly order,1520.51,closed
+B001,PO-00087,S001,2025-12-26,Fresh produce weekly order,2267.33,closed
+B001,PO-00088,S004,2025-12-29,Milk & cream weekly order,1151.06,closed
+B001,PO-00089,S001,2026-01-02,Fresh produce weekly order,1792.98,closed
+B001,PO-00090,S004,2026-01-05,Milk & cream weekly order,937.28,closed
+B001,PO-00091,S001,2026-01-09,Fresh produce weekly order,2160.46,closed
+B001,PO-00092,S004,2026-01-12,Milk & cream weekly order,938.97,closed
+B001,PO-00093,S001,2026-01-16,Fresh produce weekly order,1937.67,closed
+B001,PO-00094,S004,2026-01-19,Milk & cream weekly order,1100.5,closed
+B001,PO-00095,S001,2026-01-23,Fresh produce weekly order,2169.72,closed
+B001,PO-00096,S004,2026-01-26,Milk & cream weekly order,997.5,closed
+B001,PO-00097,S001,2026-01-30,Fresh produce weekly order,1903.72,closed
+B001,PO-00098,S004,2026-02-02,Milk & cream weekly order,829.28,closed
+B001,PO-00099,S001,2026-02-06,Fresh produce weekly order,1834.17,closed
+B001,PO-00100,S004,2026-02-09,Milk & cream weekly order,1044.41,closed
+B001,PO-00101,S001,2026-02-13,Fresh produce weekly order,1565.71,closed
+B001,PO-00102,S004,2026-02-16,Milk & cream weekly order,784.04,closed
+B001,PO-00103,S001,2026-02-20,Fresh produce weekly order,1989.37,closed
+B001,PO-00104,S004,2026-02-23,Milk & cream weekly order,932.03,closed
+B001,PO-00105,S001,2026-02-27,Fresh produce weekly order,2369.62,closed
+B001,PO-00106,S004,2026-03-02,Milk & cream weekly order,1244.57,closed
+B001,PO-00107,S001,2026-03-06,Fresh produce weekly order,2185.35,closed
+B001,PO-00108,S004,2026-03-09,Milk & cream weekly order,1179.82,closed
+B001,PO-00109,S001,2026-03-13,Fresh produce weekly order,1759.04,closed
+B001,PO-00110,S004,2026-03-16,Milk & cream weekly order,1082.24,closed
+B001,PO-00111,S001,2026-03-20,Fresh produce weekly order,2391.79,closed
+B001,PO-00112,S004,2026-03-23,Milk & cream weekly order,989.32,closed
+B001,PO-00113,S001,2026-03-27,Fresh produce weekly order,1980.67,closed
+B001,PO-00114,S004,2026-03-30,Milk & cream weekly order,1191.33,closed
+B001,PO-00115,S001,2026-04-03,Fresh produce weekly order,1976.24,closed
+B001,PO-00116,S004,2026-04-06,Milk & cream weekly order,1243.44,closed
+B001,PO-00117,S001,2026-04-10,Fresh produce weekly order,1899.61,closed
+B001,PO-00118,S004,2026-04-13,Milk & cream weekly order,1029.9,closed
+B001,PO-00119,S001,2026-04-17,Fresh produce weekly order,2212.2,closed
+B001,PO-00120,S004,2026-04-20,Milk & cream weekly order,1035.36,closed
+B001,PO-00121,S001,2026-04-24,Fresh produce weekly order,2415.43,closed
+B001,PO-00122,S004,2026-04-27,Milk & cream weekly order,1108.54,closed
+B001,PO-00123,S001,2026-05-01,Fresh produce weekly order,2179.27,closed
+B001,PO-00124,S004,2026-05-04,Milk & cream weekly order,1293.91,closed
+B001,PO-00125,S001,2026-05-08,Fresh produce weekly order,1900.48,closed
+B001,PO-00126,S004,2026-05-11,Milk & cream weekly order,920.43,closed
+B001,PO-00127,S001,2026-05-15,Fresh produce weekly order,1946.11,closed
+B001,PO-00128,S004,2026-05-18,Milk & cream weekly order,1308.07,closed
+B001,PO-00129,S001,2026-05-22,Fresh produce weekly order,2572.18,closed
+B001,PO-00130,S004,2026-05-25,Milk & cream weekly order,1234.4,closed
+B001,PO-00131,S001,2026-05-29,Fresh produce weekly order,2179.34,closed
+B001,PO-00132,S004,2026-06-01,Milk & cream weekly order,1125.76,closed
+B001,PO-00133,S001,2026-06-05,Fresh produce weekly order,2019.76,closed
+B001,PO-00134,S004,2026-06-08,Milk & cream weekly order,913.67,closed
+B001,PO-00135,S001,2026-06-12,Fresh produce weekly order,2018.07,closed
+B001,PO-00136,S004,2026-06-15,Milk & cream weekly order,1090.41,closed
+B001,PO-00137,S001,2026-06-19,Fresh produce weekly order,2008.16,closed
+B001,PO-00138,S004,2026-06-22,Milk & cream weekly order,1234.4,closed
+B001,PO-00139,S001,2026-06-26,Fresh produce weekly order,1923.16,closed
+B001,PO-00140,S004,2026-06-29,Milk & cream weekly order,1114.73,closed
+B001,PO-00141,S001,2026-07-03,Fresh produce weekly order,1863.09,closed
+B001,PO-00142,S004,2026-07-06,Milk & cream weekly order,1074.2,closed
+B001,PO-00143,S001,2026-07-10,Fresh produce weekly order,2269.49,closed
+B001,PO-00144,S004,2026-07-13,Milk & cream weekly order,1010.97,closed
+B001,PO-00145,S001,2026-07-17,Fresh produce weekly order,2484.39,closed
+B001,PO-00146,S004,2026-07-20,Milk & cream weekly order,1233.09,closed
+B001,PO-00147,S001,2026-07-24,Fresh produce weekly order,1972.9,closed
+B001,PO-00148,S004,2026-07-27,Milk & cream weekly order,949.69,closed
+B001,PO-00149,S001,2026-07-31,Fresh produce weekly order,2221.42,closed
+B001,PO-00150,S004,2026-08-03,Milk & cream weekly order,1047.06,closed
+B001,PO-00151,S001,2026-08-07,Fresh produce weekly order,2151.09,closed
+B001,PO-00152,S004,2026-08-10,Milk & cream weekly order,1368.51,closed
+B001,PO-00153,S001,2026-08-14,Fresh produce weekly order,2564.07,closed
+B001,PO-00154,S004,2026-08-17,Milk & cream weekly order,1000.25,closed
+B001,PO-00155,S001,2026-08-21,Fresh produce weekly order,2139.61,closed
+B001,PO-00156,S004,2026-08-24,Milk & cream weekly order,944.58,closed
+B001,PO-00157,S001,2026-08-28,Fresh produce weekly order,2260.3,closed
+B001,PO-00158,S004,2026-08-31,Milk & cream weekly order,1131.04,closed
+B001,PO-00159,S001,2026-09-04,Fresh produce weekly order,2323.6,closed
+B001,PO-00160,S004,2026-09-07,Milk & cream weekly order,1278.67,closed
+B001,PO-00161,S001,2026-09-11,Fresh produce weekly order,2303.58,closed
+B001,PO-00162,S004,2026-09-14,Milk & cream weekly order,1101.17,closed
+B001,PO-00163,S004,2026-09-21,Milk & cream weekly order,1300.84,closed
+B001,PO-00164,S002,2025-03-02,"Flour, sugar, butter",2769.23,closed
+B001,PO-00165,S002,2025-03-16,"Flour, sugar, butter",3084.2,closed
+B001,PO-00166,S002,2025-03-30,"Flour, sugar, butter",2624.06,closed
+B001,PO-00167,S002,2025-04-13,"Flour, sugar, butter",3136.51,closed
+B001,PO-00168,S002,2025-04-27,"Flour, sugar, butter",2844.84,closed
+B001,PO-00169,S002,2025-05-11,"Flour, sugar, butter",2820.34,closed
+B001,PO-00170,S002,2025-05-25,"Flour, sugar, butter",3004.59,closed
+B001,PO-00171,S002,2025-06-08,"Flour, sugar, butter",2586.71,closed
+B001,PO-00172,S002,2025-06-22,"Flour, sugar, butter",2809.94,closed
+B001,PO-00173,S002,2025-07-06,"Flour, sugar, butter",3194.0,closed
+B001,PO-00174,S002,2025-07-20,"Flour, sugar, butter",3039.19,closed
+B001,PO-00175,S002,2025-08-03,"Flour, sugar, butter",2979.76,closed
+B001,PO-00176,S002,2025-08-17,"Flour, sugar, butter",2922.14,closed
+B001,PO-00177,S002,2025-08-31,"Flour, sugar, butter",3394.56,closed
+B001,PO-00178,S002,2025-09-14,"Flour, sugar, butter",2966.61,closed
+B001,PO-00179,S002,2025-09-28,"Flour, sugar, butter",2753.51,closed
+B001,PO-00180,S002,2025-10-12,"Flour, sugar, butter",3133.8,closed
+B001,PO-00181,S002,2025-10-26,"Flour, sugar, butter",2875.12,closed
+B001,PO-00182,S002,2025-11-09,"Flour, sugar, butter",3250.0,closed
+B001,PO-00183,S002,2025-11-23,"Flour, sugar, butter",2907.66,closed
+B001,PO-00184,S002,2025-12-07,"Flour, sugar, butter",4005.86,closed
+B001,PO-00185,S002,2025-12-21,"Flour, sugar, butter",3389.33,closed
+B001,PO-00186,S002,2026-01-04,"Flour, sugar, butter",2884.03,closed
+B001,PO-00187,S002,2026-01-18,"Flour, sugar, butter",3050.25,closed
+B001,PO-00188,S002,2026-02-01,"Flour, sugar, butter",2691.37,closed
+B001,PO-00189,S002,2026-02-15,"Flour, sugar, butter",3014.92,closed
+B001,PO-00190,S002,2026-03-01,"Flour, sugar, butter",2753.96,closed
+B001,PO-00191,S002,2026-03-15,"Flour, sugar, butter",3307.54,closed
+B001,PO-00192,S002,2026-03-29,"Flour, sugar, butter",2846.95,closed
+B001,PO-00193,S002,2026-04-12,"Flour, sugar, butter",3360.16,closed
+B001,PO-00194,S002,2026-04-26,"Flour, sugar, butter",3284.38,closed
+B001,PO-00195,S002,2026-05-10,"Flour, sugar, butter",3664.48,closed
+B001,PO-00196,S002,2026-05-24,"Flour, sugar, butter",3566.79,closed
+B001,PO-00197,S002,2026-06-07,"Flour, sugar, butter",2851.01,closed
+B001,PO-00198,S002,2026-06-21,"Flour, sugar, butter",2743.41,closed
+B001,PO-00199,S002,2026-07-05,"Flour, sugar, butter",3549.49,closed
+B001,PO-00200,S002,2026-07-19,"Flour, sugar, butter",3165.54,closed
+B001,PO-00201,S002,2026-08-02,"Flour, sugar, butter",3613.18,closed
+B001,PO-00202,S002,2026-08-16,"Flour, sugar, butter",3314.29,closed
+B001,PO-00203,S002,2026-08-30,"Flour, sugar, butter",3323.62,closed
+B001,PO-00204,S002,2026-09-13,"Flour, sugar, butter",3328.07,closed
+B001,PO-00205,S002,2026-09-27,"Flour, sugar, butter",3020.0,closed
+B001,PO-00206,S003,2025-03-02,Coffee beans monthly,5295.68,closed
+B001,PO-00207,S005,2025-03-17,"Cups, boxes, bags",1041.55,closed
+B001,PO-00208,S003,2025-04-04,Coffee beans monthly,4642.8,closed
+B001,PO-00209,S005,2025-04-18,"Cups, boxes, bags",1189.54,closed
+B001,PO-00210,S003,2025-05-02,Coffee beans monthly,4554.32,closed
+B001,PO-00211,S005,2025-05-17,"Cups, boxes, bags",1045.21,closed
+B001,PO-00212,S003,2025-06-02,Coffee beans monthly,4463.3,closed
+B001,PO-00213,S005,2025-06-17,"Cups, boxes, bags",750.88,closed
+B001,PO-00214,S003,2025-07-04,Coffee beans monthly,4608.05,closed
+B001,PO-00215,S005,2025-07-18,"Cups, boxes, bags",1160.43,closed
+B001,PO-00216,S003,2025-08-02,Coffee beans monthly,4940.19,closed
+B001,PO-00217,S005,2025-08-17,"Cups, boxes, bags",949.17,closed
+B001,PO-00218,S003,2025-09-02,Coffee beans monthly,5090.3,closed
+B001,PO-00219,S005,2025-09-19,"Cups, boxes, bags",1140.85,closed
+B001,PO-00220,S003,2025-10-03,Coffee beans monthly,5054.86,closed
+B001,PO-00221,S005,2025-10-17,"Cups, boxes, bags",1281.47,closed
+B001,PO-00222,S003,2025-11-02,Coffee beans monthly,6011.27,closed
+B001,PO-00223,S005,2025-11-17,"Cups, boxes, bags",1369.3,closed
+B001,PO-00224,S003,2025-12-02,Coffee beans monthly,6862.85,closed
+B001,PO-00225,S005,2025-12-19,"Cups, boxes, bags",1156.74,closed
+B001,PO-00226,S003,2026-01-02,Coffee beans monthly,4498.42,closed
+B001,PO-00227,S005,2026-01-17,"Cups, boxes, bags",1028.13,closed
+B001,PO-00228,S003,2026-02-02,Coffee beans monthly,4604.21,closed
+B001,PO-00229,S005,2026-02-17,"Cups, boxes, bags",1060.67,closed
+B001,PO-00230,S003,2026-03-02,Coffee beans monthly,4605.89,closed
+B001,PO-00231,S005,2026-03-17,"Cups, boxes, bags",997.08,closed
+B001,PO-00232,S003,2026-04-03,Coffee beans monthly,4689.81,closed
+B001,PO-00233,S005,2026-04-17,"Cups, boxes, bags",1380.14,closed
+B001,PO-00234,S003,2026-05-02,Coffee beans monthly,5962.81,closed
+B001,PO-00235,S005,2026-05-17,"Cups, boxes, bags",1045.68,closed
+B001,PO-00236,S003,2026-06-02,Coffee beans monthly,5542.49,closed
+B001,PO-00237,S005,2026-06-19,"Cups, boxes, bags",1103.37,closed
+B001,PO-00238,S003,2026-07-03,Coffee beans monthly,5857.34,closed
+B001,PO-00239,S005,2026-07-17,"Cups, boxes, bags",1082.77,closed
+B001,PO-00240,S003,2026-08-02,Coffee beans monthly,5895.3,closed
+B001,PO-00241,S005,2026-08-17,"Cups, boxes, bags",1284.02,closed
+B001,PO-00242,S003,2026-09-04,Coffee beans monthly,5771.58,closed
+B001,PO-00243,S005,2026-09-18,"Cups, boxes, bags",1097.72,closed
+B001,PO-00244,S001,2026-09-18,Fresh produce weekly order,2180.0,closed
+B001,PO-00245,S004,2026-09-21,Milk & cream weekly order,1090.0,closed
+B001,PO-00246,S001,2026-09-25,Fresh produce weekly order,2260.0,closed

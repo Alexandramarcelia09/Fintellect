@@ -1,0 +1,7 @@
+product_id,provider,product_type,min_amount,max_amount,pricing,advance_rate,tenor_months,approval_days,collateral,min_years_operating,min_annual_revenue,best_for
+FP-01,Northbridge Capital (fictional),Invoice financing,5000,200000.0,1.1% per 30 days on amount advanced,0.8,per invoice (<=120 days),3,Assigned invoices,1.0,300000,Unlocking cash tied up in slow-paying B2B invoices
+FP-02,Lion City Bank (fictional),Working capital term loan,20000,300000.0,6.2%-7.5% p.a.,,12-60,14,Director guarantee,2.0,500000,Structural working capital needs
+FP-03,Lion City Bank (fictional),Overdraft facility,10000,50000.0,Benchmark rate + 3.5% p.a. on drawn balance; 0.5% commitment fee,,12 (renewable),10,Director guarantee,2.0,400000,"Short, temporary cash dips"
+FP-04,Merlion Asset Finance (fictional),Equipment hire purchase,10000,250000.0,4.5% flat p.a.,0.9,12-60,5,The equipment,1.0,200000,Spreading the cost of new equipment
+FP-05,SwiftAdvance (fictional),Merchant cash advance,5000,80000.0,Factor 1.15 (~30%+ effective annual),,~6 (12% of card settlements),1,Future card sales,0.5,150000,Emergency only - expensive
+FP-06,Existing suppliers,Supplier term extension (negotiated),0,,Usually free; may lose early-payment goodwill,,+15 to +30 days,2,None,0.0,0,Bridging a short timing gap

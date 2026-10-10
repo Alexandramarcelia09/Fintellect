@@ -1,0 +1,10 @@
+business_id,supplier_id,name,bank_name_seen,category,account_code,payment_terms_days,verified_bank_name,verified_account_no,payee_status,bank_details_verified_on
+B001,S001,Fresh Farm Produce Pte Ltd,FRESHFARM PRODUCE PTE,COGS - food ingredients,5000,14,Lion City Bank,501-223344-0,approved,2024-09-12
+B001,S002,Golden Grain Flour Mill,GOLDEN GRAIN FLR MILL,COGS - food ingredients,5000,30,Harbour Trust Bank,612-008812-7,approved,2023-01-20
+B001,S003,Highland Coffee Roasters,HIGHLAND COFFEE ROAST,COGS - coffee beans,5010,30,Lion City Bank,501-998120-3,approved,2022-06-15
+B001,S004,Dairy Direct SG,DAIRY DIRECT SG PL,COGS - dairy,5020,14,Straits Mutual Bank,330-441209-8,approved,2022-07-01
+B001,S005,PackRight Packaging,PACKRIGHT PACKAGING,COGS - packaging,5030,30,Lion City Bank,501-556677-1,approved,2023-03-03
+B001,S006,CoolTech Refrigeration Services,COOLTECH REFRIG SVCS,Repairs & maintenance,6140,14,Harbour Trust Bank,612-771200-4,approved,2022-08-09
+B001,S007,Brightside Digital Marketing,BRIGHTSIDE DIGITAL,Marketing,6150,14,Straits Mutual Bank,330-120934-2,approved,2024-02-14
+B001,S008,ProBake Equipment Pte Ltd,PROBAKE EQUIPMENT,Equipment,1500,0,Lion City Bank,501-880045-6,pending_verification,
+B001,S009,Espresso Parts Co,ESPRESSO PARTS CO,Equipment,1500,0,Straits Mutual Bank,330-670021-5,approved,2025-08-11

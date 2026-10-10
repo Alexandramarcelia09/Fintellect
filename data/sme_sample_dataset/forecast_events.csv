@@ -1,0 +1,11 @@
+business_id,event_id,event_date,description,type,amount,certainty,scenarios
+B001,EV-01,2026-10-20,New deck oven - 30% deposit (ProBake quotation Q-5521),outflow,7848.0,committed,all
+B001,EV-02,2026-11-16,New deck oven - balance on delivery,outflow,18312.0,committed,all
+B001,EV-03,2026-10-31,GST 2026 Q3 payment,outflow,14021.4,committed,all
+B001,EV-04,2026-11-30,Corporate income tax YA2026 (estimate),outflow,11400.0,likely,all
+B001,EV-05,2026-12-28,"Year-end 1-month bonus (with Dec payroll), gross",outflow,22866.0,likely,all
+B001,EV-06,2026-12-01,Christmas catering contract - Harbourview year-end party,inflow,9810.0,possible,best
+B001,EV-07,2027-01-01,"Rent increases to 10,500/month (lease renewal)",recurring_change,700.0,committed,all
+B001,EV-08,2027-02-01,"Hire additional baker (3,100/month + 17% CPF)",recurring_change,3627.0,planned,expected;best
+B001,EV-09,2027-02-06,Chinese New Year closure (2 days),revenue_loss,0.0,committed,all
+B001,EV-10,2027-07-10,Insurance renewal,outflow,3950.0,likely,all

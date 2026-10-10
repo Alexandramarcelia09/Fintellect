@@ -1,0 +1,6 @@
+business_id,customer_id,name,bank_name_seen,segment,payment_terms_days,credit_limit,contact_email
+B001,C001,Harbourview Co-Working Pte Ltd,HARBOURVIEW COWORKING PTE,Corporate catering,30,40000,ap@harbourview.example
+B001,C002,Marina Dental Group,MARINA DENTAL GRP,Corporate catering,14,6000,admin@marinadental.example
+B001,C003,Bean There Cafe,BEAN THERE CAFE LLP,Wholesale pastries,30,6000,orders@beanthere.example
+B001,C004,Northpoint Primary School PTA,NORTHPOINT PRI SCH PTA,Events,14,5000,pta@northpoint.example
+B001,C005,Greenline Logistics Pte Ltd,GREENLINE LOGISTICS,Corporate catering,30,10000,finance@greenline.example

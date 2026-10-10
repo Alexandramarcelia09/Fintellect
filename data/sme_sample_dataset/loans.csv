@@ -1,0 +1,2 @@
+business_id,loan_id,lender,product,principal,rate_type,annual_rate,tenor_months,drawdown_date,first_installment,monthly_installment,purpose,security
+B001,LN-001,Lion City Bank (fictional),Equipment & fit-out term loan,120000.0,fixed,0.048,60,2024-10-01,2024-11-01,2253.57,Kitchen fit-out and blast chiller,Director personal guarantee

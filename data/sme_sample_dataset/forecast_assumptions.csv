@@ -1,0 +1,19 @@
+business_id,scenario,driver,value,unit,notes
+B001,worst,pos_sales_growth_monthly,-0.01,pct,Walk-in traffic softens
+B001,expected,pos_sales_growth_monthly,0.005,pct,Trailing 12-month trend
+B001,best,pos_sales_growth_monthly,0.012,pct,New menu + oven capacity
+B001,worst,b2b_sales_growth_monthly,-0.02,pct,Lose a catering client
+B001,expected,b2b_sales_growth_monthly,0.008,pct,
+B001,best,b2b_sales_growth_monthly,0.02,pct,Win additional office contract
+B001,worst,cogs_pct_of_revenue,0.36,ratio,Ingredient inflation
+B001,expected,cogs_pct_of_revenue,0.33,ratio,Trailing average
+B001,best,cogs_pct_of_revenue,0.31,ratio,Renegotiated flour contract
+B001,worst,opex_growth_annual,0.06,pct,
+B001,expected,opex_growth_annual,0.03,pct,
+B001,best,opex_growth_annual,0.02,pct,
+B001,worst,harbourview_payment_delay_days,60.0,days after due,Trend continues to worsen
+B001,expected,harbourview_payment_delay_days,40.0,days after due,Trend of the last 6 paid invoices
+B001,best,harbourview_payment_delay_days,5.0,days after due,Collections follow-up succeeds
+B001,all,card_mdr_pct,0.016,ratio,Card fees deducted at settlement
+B001,all,card_settlement_lag_days,2.0,days,Next business day if weekend
+B001,all,min_cash_buffer,30000.0,SGD,Owner policy: ~1 month payroll + rent
