@@ -62,9 +62,10 @@ export function forecast(DS, S, H, sc, horizon, over) {
     const b2b = baseB * Math.pow(1 + A.b2bGrowth / 100, t + 1) * sB(cm);
     const oneRev = sumK("revenue");
     const rev = pos + b2b + oneRev, cogs = (rev * A.cogsPct) / 100;
-    let opexCash = 0;
+    let opexCash = 0, opexVar = 0;
     for (const id in fixed) opexCash += fixed[id] * (noGrowth[id] ? 1 : Math.pow(1 + A.opexGrowth / 100, yearsStepped));
-    for (const id in varRatio) opexCash += pos * varRatio[id];
+    for (const id in varRatio) opexVar += pos * varRatio[id];
+    opexCash += opexVar;
     opexCash += evs.filter((e) => e.kind === "monthly" && e.month <= k).reduce((a, e) => a + e.amount, 0);
     opexCash += sumK("cost");
     const capex = sumK("capex"), payments = sumK("payment"), loansIn = sumK("in"), equityIn = sumK("equity");
@@ -93,7 +94,7 @@ export function forecast(DS, S, H, sc, horizon, over) {
     const openCash = cash;
     cash += flow;
     out.push({
-      k, t, rev, pos, b2b, oneRev, cogs, gross, opex, opexCash, dep, op, interest, tax, np, principal, drawings, capex, payments, loansIn, equityIn,
+      k, t, rev, pos, b2b, oneRev, cogs, gross, opex, opexCash, opexVar, dep, op, interest, tax, np, principal, drawings, capex, payments, loansIn, equityIn,
       hvRev, hvIn, gstIn, gstPaid, taxPaid, flow, openCash, cash, events: evM, cashCosts: cogs + opexCash + interest, opFlow: np + dep + tax - principal - drawings,
     });
   }

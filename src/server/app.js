@@ -9,9 +9,10 @@ import { join, dirname, normalize, extname, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomBytes } from "node:crypto";
 import { buildDataset } from "../data/build-dataset.js";
-import { computeHistory, forecast, fcSummary, forecastWeekly } from "../engine/index.js";
+import { computeHistory, forecast, fcSummary, forecastWeekly, applyTransactions, modelDefaults } from "../engine/index.js";
 import { SESSION_COOKIE, signSession, verifySession, parseCookies, sessionCookie, can, safeEqual, RateLimiter, ROLE_CAPS } from "./auth.js";
 import { StateStore, AuditLog, validateState, ValidationError } from "./state.js";
+import { ask, cleanHistory, createClient } from "./assistant.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "../..");
@@ -33,11 +34,14 @@ const SECURITY_HEADERS = {
 class HttpError extends Error { constructor(status, message) { super(message); this.status = status; } }
 
 export function createApp(opts) {
-  const { repo, secret, varDir = join(ROOT, "var"), demoPasscode = "demo1234", secureCookies = false, loginLimitPerMinute = 10 } = opts;
+  const { repo, secret, varDir = join(ROOT, "var"), demoPasscode = "demo1234", secureCookies = false, loginLimitPerMinute = 10, assistantPerHour = 30 } = opts;
+  // The AI assistant is on when an Anthropic client is available (ANTHROPIC_API_KEY, or one passed in by tests).
+  const assistant = opts.assistantClient !== undefined ? opts.assistantClient : createClient();
   if (!secret || secret.length < 16) throw new Error("A session secret of at least 16 characters is required");
   const store = new StateStore(join(varDir, "state"));
   const audit = new AuditLog(join(varDir, "audit.jsonl"));
   const limiter = new RateLimiter(loginLimitPerMinute, 60_000);
+  const askLimiter = new RateLimiter(assistantPerHour, 60 * 60_000);
   const users = repo.users();
   const userById = new Map(users.map((u) => [u.id, u]));
   const datasets = new Map(); // built lazily, once per business
@@ -65,10 +69,13 @@ export function createApp(opts) {
         open: saved.open || DS.open, cats: saved.cats || DS.cats, data: saved.data || DS.data,
         assumptions: saved.assumptions || DS.assumptions, events: saved.events || DS.events, global: saved.global || DS.global,
         business: { ...DS.business, ...(saved.business || {}) },
+        txns: saved.txns || [], model: saved.model || modelDefaults(DS.global.drawings),
       },
       saved,
     };
   }
+  // Statements built from the saved figures plus the transactions users recorded.
+  const historyOf = (DS, S) => computeHistory(applyTransactions(S, DS.months), DS.months);
 
   const routes = [
     ["GET", /^\/api\/health$/, () => ({ ok: true })],
@@ -101,7 +108,7 @@ export function createApp(opts) {
     ["GET", /^\/api\/businesses\/([^/]+)\/bootstrap$/, (req, res, [id]) => {
       const user = currentUser(req); requireTenant(req, user, id);
       const DS = datasetFor(id);
-      return { dataset: DS, saved: store.get(id), user: publicUser(user) };
+      return { dataset: DS, saved: store.get(id), user: publicUser(user), assistant: !!assistant };
     }],
     ["PUT", /^\/api\/businesses\/([^/]+)\/state$/, async (req, res, [id]) => {
       const user = currentUser(req); requireTenant(req, user, id);
@@ -136,10 +143,28 @@ export function createApp(opts) {
       const horizon = Number(url.searchParams.get("horizon") || 12);
       if (![12, 24, 36].includes(horizon)) throw new HttpError(400, "horizon must be 12, 24 or 36");
       const { DS, S } = mergedState(id);
-      const H = computeHistory(S, DS.months);
+      const H = historyOf(DS, S);
       const F = forecast(DS, S, H, sc, horizon);
       const s = fcSummary(F, S.global.minBuffer);
       return { scenario: sc, horizon, months: F.map(({ events, ...f }) => ({ ...f, events: events.map((e) => e.name) })), summary: { rev: s.rev, np: s.np, endCash: s.end.cash, minCash: s.min.cash, minMonth: s.min.k, firstNegative: s.neg?.k || null, firstBelowBuffer: s.below?.k || null } };
+    }],
+    ["POST", /^\/api\/businesses\/([^/]+)\/assistant$/, async (req, res, [id]) => {
+      const user = currentUser(req); requireTenant(req, user, id);
+      if (!assistant) throw new HttpError(503, "The AI assistant isn't set up. Add ANTHROPIC_API_KEY to the server's environment.");
+      if (!askLimiter.allow(user.id)) throw new HttpError(429, "You've asked a lot of questions this hour. Try again later.");
+      const history = cleanHistory((await readJson(req)).messages);
+      if (!history) throw new HttpError(400, "Send messages ending with a question");
+      const { DS, S } = mergedState(id);
+      if (DS.limited) throw new HttpError(400, "The assistant needs sales, bills and payroll records, which this business doesn't have yet");
+      let out;
+      try { out = await ask(assistant, { DS, S, H: historyOf(DS, S) }, history); }
+      catch (e) {
+        console.error("assistant:", e.status || "", e.message);
+        throw new HttpError(502, e.status === 429 ? "The AI service is busy. Try again in a minute." : "The AI assistant couldn't answer right now. Try again.");
+      }
+      // Logged without the question text: the log records that the assistant was used, not what was asked.
+      audit.write({ type: "assistant_question", businessId: id, userId: user.id, tools: out.tools.slice(0, 20) });
+      return out;
     }],
     ["GET", /^\/api\/businesses\/([^/]+)\/audit$/, (req, res, [id]) => {
       const user = currentUser(req); requireTenant(req, user, id);
@@ -187,7 +212,7 @@ function scenarioParam(url) {
 }
 
 function changedSections(a, b) {
-  return ["data", "cats", "open", "assumptions", "events", "global", "business"].filter((k) => JSON.stringify(a[k]) !== JSON.stringify(b[k]));
+  return ["data", "cats", "open", "assumptions", "events", "global", "business", "txns", "model"].filter((k) => JSON.stringify(a[k]) !== JSON.stringify(b[k]));
 }
 
 function readJson(req) {

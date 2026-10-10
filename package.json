@@ -1,7 +1,7 @@
 {
   "name": "fintellect",
   "version": "0.2.0",
-  "description": "SME finance copilot: financial statements, health dashboard, monthly and 13-week cash forecasts built from a small business's own records.",
+  "description": "SME finance copilot: financial statements, health dashboard, cash forecasts, a financial model and an AI assistant built from a small business's own records.",
   "type": "module",
   "private": true,
   "engines": {
@@ -13,5 +13,8 @@
     "test": "node --test \"test/**/*.test.js\"",
     "build:data": "node src/data/export-bootstrap.js"
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.133.0"
+  }
 }

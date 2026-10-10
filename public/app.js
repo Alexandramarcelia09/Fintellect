@@ -1,9 +1,11 @@
 // Fintellect frontend. All calculations come from the shared engine in /engine (the same modules the
 // server and the tests run). Business data is loaded from the API for the signed-in user only.
-import { MN, ml, ms, msy, addM, monthEnd, POS_GROUP, sumObj, computeHistory, runwayAt, forecast as engineForecast, fcSummary, forecastWeekly, weeklyByCategory, fmtDayMonth } from "/engine/index.js";
+import { MN, ml, ms, msy, addM, monthEnd, POS_GROUP, sumObj, computeHistory, runwayAt, forecast as engineForecast, fcSummary, forecastWeekly, weeklyByCategory, fmtDayMonth,
+  TXN_KINDS, applyTransactions, categorySection, txnNeedsCategory, txnIsIncome, txnHasDue, txnTotalsByMonth, parseTxnCsv,
+  threeStatement, annualize, breakEvenActual, breakEvenForecast, valuation, modelDefaults } from "/engine/index.js";
 
 const clone = (o) => JSON.parse(JSON.stringify(o));
-let DS = null, MONTHS = [], USER = null, KC = "", S = null, H = [];
+let DS = null, MONTHS = [], USER = null, KC = "", S = null, H = [], ASSIST = false;
 const canWrite = () => !!USER && USER.capabilities.includes("write");
 const forecast = (S_, H_, sc, hz, over) => engineForecast(DS, S_, H_, sc, hz, over);
 const weekly = (sc, over) => forecastWeekly(DS.weekly, Object.assign({}, S.assumptions[sc], over || {}), { events: S.events, scenario: sc, drawings: S.global.drawings, baseCogsPct: DS.assumptions.expected.cogsPct, seasonality: S.global.seasonality });
@@ -19,10 +21,10 @@ async function api(path, opts = {}) {
 
 /* ---------- State ---------- */
 const UI_KEY = "fintellect-ui-v1";
-const DATA_KEYS = ["open", "cats", "data", "assumptions", "events", "global", "business"];
-function defaultUi() { return { month: MONTHS[MONTHS.length - 1], cmp: "prev", stTab: "pl", stTime: "month", stCmp: "prev", inMonth: MONTHS[MONTHS.length - 1], scenario: "expected", horizon: "w13", report: "pl" }; }
+const DATA_KEYS = ["open", "cats", "data", "assumptions", "events", "global", "business", "txns", "model"];
+function defaultUi() { return { month: MONTHS[MONTHS.length - 1], cmp: "prev", stTab: "pl", stTime: "month", stCmp: "prev", inMonth: MONTHS[MONTHS.length - 1], scenario: "expected", horizon: "w13", report: "pl", txKind: "sale", txMonth: "all", mTab: "pl", mView: "annual", mYear: 1 }; }
 function sampleState() {
-  return { business: clone(DS.business), open: clone(DS.open), cats: clone(DS.cats), data: clone(DS.data), assumptions: clone(DS.assumptions), global: clone(DS.global), events: clone(DS.events), ui: defaultUi() };
+  return { business: clone(DS.business), open: clone(DS.open), cats: clone(DS.cats), data: clone(DS.data), assumptions: clone(DS.assumptions), global: clone(DS.global), events: clone(DS.events), txns: [], model: modelDefaults(DS.global.drawings), ui: defaultUi() };
 }
 function buildState(saved) {
   const s = sampleState();
@@ -51,7 +53,8 @@ function saveBadge() {
   if (!canWrite()) return `<span class="badge neu">${ic("eye", 13, 2.2)}View only</span>`;
   return saveStatus === "error" ? `<span class="badge neg">Not saved</span>` : saveStatus === "saving" ? `<span class="badge neu">Saving…</span>` : `<span class="badge pos">${ic("check", 13, 2.2)}Saved</span>`;
 }
-function recompute() { H = computeHistory(S, MONTHS); }
+// Statements include the transactions recorded on the Transactions page.
+function recompute() { H = computeHistory(applyTransactions(S, MONTHS), MONTHS); }
 
 /* ---------- Format ---------- */
 const CUR="S$";
@@ -94,7 +97,12 @@ const ICONS={
   eye:P("M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z")+'<circle cx="12" cy="12" r="3"/>',
   clock:'<circle cx="12" cy="12" r="10"/>'+P("M12 6v6l4 2"),
   shield:P("M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z")+P("M12 8v4M12 16h.01"),
-  reset:P("M3 12a9 9 0 1 0 3-6.7L3 8")+P("M3 3v5h5")
+  reset:P("M3 12a9 9 0 1 0 3-6.7L3 8")+P("M3 3v5h5"),
+  receipt:P("M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z")+P("M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 17.5v-11"),
+  model:'<rect x="3" y="3" width="18" height="18" rx="2"/>'+P("M3 9h18M3 15h18M9 3v18"),
+  chat:P("M7.9 20A9 9 0 1 0 4 16.1L2 22Z")+P("M8 12h.01M12 12h.01M16 12h.01"),
+  upload:P("M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4")+P("M17 8l-5-5-5 5M12 3v12"),
+  send:P("m22 2-7 20-4-9-9-4Z")+P("M22 2 11 13")
 };
 const ic=(n,s=18,sw=1.8)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||""}</svg>`;
 
@@ -105,6 +113,7 @@ const G={
   gross:["Gross profit","What's left of revenue after paying for the goods you sold.","Gross profit = Revenue − COGS"],
   gm:["Gross margin","Percentage of revenue remaining after the cost of goods sold. Bakeries and cafés commonly run 60–70%.","Gross margin = Gross profit ÷ Revenue × 100"],
   opex:["Operating expenses","Costs of running the business that aren't tied to each sale: staff, CPF, rent, utilities, marketing, software, repairs.",""],
+  ebitda:["EBITDA","Earnings before interest, tax, depreciation and amortisation: profit from running the business before financing, tax and non-cash equipment costs. Lenders and buyers often use it to compare businesses.","EBITDA = Operating profit + Depreciation"],
   op:["Operating profit","Profit from running the business, before loan interest and tax.","Operating profit = Gross profit − Operating expenses"],
   om:["Operating margin","Operating profit as a share of revenue.","Operating margin = Operating profit ÷ Revenue × 100"],
   np:["Net profit","What the business earned after every cost, interest and tax.","Net profit = Operating profit − Interest − Taxes"],
@@ -204,7 +213,7 @@ function copyText(t,label){const done=()=>toast(label+" copied");
 const alertRow=a=>`<div class="alert ${a[0]==="info"?"tinfo":a[0]}"><span class="ic">${ic(a[0]==="pos"?"check":a[0]==="info"?"info":a[3]||"alert",18)}</span><div><b>${esc(a[1])}</b><span>${esc(a[2])}</span></div></div>`;
 
 /* ---------- Shell ---------- */
-const NAV=[["OVERVIEW",[["dashboard","Dashboard","dashboard"]]],["FINANCIALS",[["statements","Statements","statements"],["input","Input data","input"]]],["FORECAST",[["assumptions","Assumptions","sliders"],["forecast","Forecast","forecast"]]],["REPORTS",[["reports","Reports & export","download"]]]];
+const NAV=[["OVERVIEW",[["dashboard","Dashboard","dashboard"],["assistant","Ask AI","chat"]]],["FINANCIALS",[["statements","Statements","statements"],["transactions","Transactions","receipt"],["input","Input data","input"]]],["FORECAST",[["assumptions","Assumptions","sliders"],["forecast","Forecast","forecast"],["model","Financial model","model"]]],["REPORTS",[["reports","Reports & export","download"]]]];
 const PAGES={
   dashboard:["Financial health","How is my business doing right now?"],
   statements:["Financial statements","What happened? Profit & loss, cash flow and balance sheet, calculated from your records."],
@@ -214,6 +223,9 @@ const PAGES={
   reports:["Reports & export","Share your numbers with your accountant, bank or a lender."],
   setup:["Business setup","Business profile and the opening balance sheet."],
   glossary:["Glossary","Plain-language explanations of every metric in the app."],
+  transactions:["Transactions","Record sales, invoices, expenses and bills one by one. Each one adds to that month's figures, statements and forecast."],
+  model:["Financial model","Projected profit & loss, cash flow and balance sheet, break-even point and an estimate of what the business is worth."],
+  assistant:["Ask AI","Ask questions about your figures, statements and forecast in plain language."],
   activity:["Activity log","Sign-ins, saved changes and refused requests for this business. Visible to the owner only."]
 };
 let route="dashboard";
@@ -444,11 +456,13 @@ const OTHER_FIELDS=[
   ["Loans & owner",[["loanIn","Loans received"],["loanRepay","Loan repayments (principal)","loan"],["ownerIn","Owner investment"],["drawings","Owner drawings","draw"]]],
   ["Balances at month end",[["ar","Accounts receivable","ar"],["inv","Inventory","inv"],["oca","Settlements in transit & prepayments","oca"],["deposit","Rental deposit"],["ap","Accounts payable","ap"],["ocl","GST, CPF & tax payable","ocl"]]]
 ];
+// Amounts the recorded transactions add to month k, by section and category.
+function txnAdds(k){const o={rev:{},cogs:{},opex:{}};(S.txns||[]).forEach(t=>{if(t.date.slice(0,7)!==k||!txnNeedsCategory(t.kind))return;const sec=categorySection(S.cats,t.category);if(sec)o[sec][t.category]=(o[sec][t.category]||0)+t.amount;});return o;}
 function vInput(){
-  const k=S.ui.inMonth,i=MONTHS.indexOf(k),d=S.data[k],pk=i>0?MONTHS[i-1]:null,pd=pk?S.data[pk]:null;
+  const k=S.ui.inMonth,i=MONTHS.indexOf(k),d=S.data[k],pk=i>0?MONTHS[i-1]:null,pd=pk?S.data[pk]:null,tx=txnAdds(k);
   const ctrls=`<div class="mnav"><button class="icon-btn" data-act="inPrev" aria-label="Previous month"${i===0?" disabled":""}>${ic("left",18)}</button>${selectBox("inMonth",monthOpts(),k,"Month")}<button class="icon-btn" data-act="inNext" aria-label="Next month"${i===MONTHS.length-1?" disabled":""}>${ic("right",18)}</button></div>`;
   const row=(sec,c,typeTag,termKey)=>{const v=d[sec][c.id]||0,pv=pd?pd[sec][c.id]||0:null;
-    return`<div class="irow"><span class="nm"><span class="t">${esc(c.name)}</span>${typeTag||""}${termKey?info(termKey):""}${c.custom?`<button class="icon-btn sm" data-act="delCat" data-sec="${sec}" data-id="${c.id}" aria-label="Remove ${esc(c.name)}">${ic("trash",15)}</button>`:""}</span><span class="prev num">${pv==null?"—":money(pv)}</span><label class="inp"><span class="pre">S$</span><input class="r" inputmode="numeric" id="in-${sec}-${c.id}" data-sec="${sec}" data-id="${c.id}" value="${v<0?"-":""}${grp(Math.abs(v))}" aria-label="${esc(c.name)}"></label></div>`;};
+    return`<div class="irow"><span class="nm"><span class="t">${esc(c.name)}</span>${typeTag||""}${tx[sec]&&tx[sec][c.id]?`<a class="tag var" href="#transactions" data-route="transactions" title="Recorded on the Transactions page; added on top of this amount">+${money(tx[sec][c.id])} recorded</a>`:""}${termKey?info(termKey):""}${c.custom?`<button class="icon-btn sm" data-act="delCat" data-sec="${sec}" data-id="${c.id}" aria-label="Remove ${esc(c.name)}">${ic("trash",15)}</button>`:""}</span><span class="prev num">${pv==null?"—":money(pv)}</span><label class="inp"><span class="pre">S$</span><input class="r" inputmode="numeric" id="in-${sec}-${c.id}" data-sec="${sec}" data-id="${c.id}" value="${v<0?"-":""}${grp(Math.abs(v))}" aria-label="${esc(c.name)}"></label></div>`;};
   const typeTag=t=>t==="VARIABLE"?`<span class="tag var">Variable</span>`:t==="NONCASH"?`<span class="tag nc">Non-cash</span>`:`<span class="tag">Fixed</span>`;
   const block=(sec,title,sub,cats,tagFn)=>`<section class="card"><div class="card-h"><div class="t"><h2>${title}</h2><p>${sub}</p></div><button class="btn sm" data-act="addCat" data-sec="${sec}">${ic("plus",15)}Add category</button></div>
     <div class="ihead"><span>Category</span><span>${pk?ms(pk):""}</span><span>${ml(k)}</span></div>
@@ -672,7 +686,7 @@ function vGlossary(){
 }
 
 /* ---------- Router & events ---------- */
-const VIEWS={activity:vActivity,dashboard:vDashboard,statements:vStatements,input:vInput,assumptions:vAssumptions,forecast:vForecast,reports:vReports,setup:vSetup,glossary:vGlossary};
+const VIEWS={activity:vActivity,dashboard:vDashboard,statements:vStatements,input:vInput,assumptions:vAssumptions,forecast:vForecast,reports:vReports,setup:vSetup,glossary:vGlossary,transactions:vTransactions,model:vModel,assistant:vAssistant};
 function render(keepScroll){
   const y=window.scrollY;CHARTS.length=0;hidePop();
   renderSide();document.getElementById("main").innerHTML=VIEWS[route]();
@@ -691,9 +705,10 @@ document.addEventListener("click",e=>{
   if(!e.target.closest("#pop"))hidePop();
   const sg=e.target.closest("[data-seg]");
   if(sg){const n=sg.dataset.seg,v=sg.dataset.v;
-    if(n==="stTab")S.ui.stTab=v;else if(n==="scenario")S.ui.scenario=v;else if(n==="horizon")S.ui.horizon=v==="w13"?"w13":+v;else if(n==="seas"){S.global.seasonality=v==="on";}
+    if(n==="stTab")S.ui.stTab=v;else if(n==="scenario")S.ui.scenario=v;else if(n==="horizon")S.ui.horizon=v==="w13"?"w13":+v;else if(n==="seas"){S.global.seasonality=v==="on";}else if(n==="mTab")S.ui.mTab=v;else if(n==="mView")S.ui.mView=v;else if(n==="mYear")S.ui.mYear=+v;
     save();render(true);return;}
   const a=e.target.closest("[data-act]");if(!a)return;const act=a.dataset.act;
+  if(FEATURE_ACTS[act]){FEATURE_ACTS[act](a,e);return;}
   if(act==="menu")document.getElementById("app").classList.add("open");
   if(act==="closeMenu")document.getElementById("app").classList.remove("open");
   if(act==="inPrev"||act==="inNext"){const i=MONTHS.indexOf(S.ui.inMonth)+(act==="inNext"?1:-1);if(i>=0&&i<MONTHS.length){S.ui.inMonth=MONTHS[i];save();render(true);}}
@@ -701,7 +716,9 @@ document.addEventListener("click",e=>{
     box.innerHTML=`<div class="irow"><label class="inp"><input id="newcat-${sec}" placeholder="New category name" aria-label="New category name"></label>${sec==="opex"?`<label class="inp"><select id="newtype-${sec}" aria-label="Cost type"><option value="FIXED">Fixed</option><option value="VARIABLE">Variable</option></select></label>`:sec==="rev"?`<label class="inp"><select id="newtype-${sec}" aria-label="Revenue stream"><option value="b2b">B2B</option><option value="pos">Café</option></select></label>`:"<span></span>"}<button class="btn sm pri" data-act="saveCat" data-sec="${sec}">Add</button></div>`;
     document.getElementById("newcat-"+sec).focus();}
   if(act==="saveCat")saveCat(a.dataset.sec);
-  if(act==="delCat"){const{sec,id}=a.dataset;S.cats[sec]=S.cats[sec].filter(c=>c.id!==id);commit();toast("Category removed");}
+  if(act==="delCat"){const{sec,id}=a.dataset,n=(S.txns||[]).filter(t=>t.category===id).length;
+    if(n){toast(`${n} recorded ${n===1?"transaction uses":"transactions use"} this category. Delete ${n===1?"it":"them"} on the Transactions page first.`);return;}
+    S.cats[sec]=S.cats[sec].filter(c=>c.id!==id);commit();toast("Category removed");}
   if(act==="addEvent"||act==="preset"){const p=act==="preset"?PRESETS[+a.dataset.ix]:["New event","payment",5000];
     S.events.push({id:"u"+Date.now().toString(36),name:p[0],month:addM(MONTHS[MONTHS.length-1],3),kind:p[1],amount:p[2],sc:["worst","expected","best"]});commit();toast("Event added to all scenarios");}
   if(act==="delEvent"){S.events=S.events.filter(x=>x.id!==a.dataset.id);commit();toast("Event deleted");}
@@ -728,6 +745,7 @@ document.addEventListener("keydown",e=>{
 });
 document.addEventListener("change",e=>{
   const t=e.target,id=t.id;
+  if(featureChange(t))return;
   if(id==="dashMonth"||id==="stMonth"){S.ui.month=t.value;save();render(true);return;}
   if(id==="dashCmp"){S.ui.cmp=t.value;save();render(true);return;}
   if(id==="stTime"){S.ui.stTime=t.value;save();render(true);return;}
@@ -878,7 +896,7 @@ async function boot(){
   try{me=(await api("/api/me")).user;}catch(e){return showLogin();}
   let b;
   try{b=await api(`/api/businesses/${encodeURIComponent(me.businessId)}/bootstrap`);}catch(e){return showLogin(e.message);}
-  DS=b.dataset;USER=b.user;MONTHS=DS.months;KC=DS.keyCustomer.short;
+  DS=b.dataset;USER=b.user;MONTHS=DS.months;KC=DS.keyCustomer.short;ASSIST=!!b.assistant;CHAT=loadChat();
   S=buildState(b.saved);lastSaved=dataSnapshot();recompute();
   document.title=`Fintellect · ${DS.business.name}`;
   route=VIEWS[location.hash.slice(1)]?location.hash.slice(1):"dashboard";
@@ -902,3 +920,271 @@ function vLimited(){
   <section class="card"><div class="card-h"><div class="t"><h2>Bank balance</h2><p>Month end, from the bank statement</p></div></div><div class="chart" id="chBank"></div></section>
   </div>`;
 }
+
+/* ---------- Transactions ---------- */
+const TX_TXT=Object.fromEntries(TXN_KINDS);
+const allCats=()=>[...S.cats.rev,...S.cats.cogs,...S.cats.opex];
+const catName=id=>(allCats().find(c=>c.id===id)||{}).name||id||"";
+// Categories a transaction type can use: revenue for income, cost of goods and cash operating costs for spending.
+function txCatOpts(kind){
+  if(!txnNeedsCategory(kind))return[];
+  if(txnIsIncome(kind))return S.cats.rev.map(c=>[c.id,c.name]);
+  return[...S.cats.cogs.filter(c=>c.id!=="stock").map(c=>[c.id,"Cost of goods · "+c.name]),...S.cats.opex.filter(c=>c.type!=="NONCASH").map(c=>[c.id,"Expense · "+c.name])];
+}
+const txFirst=()=>MONTHS[0]+"-01";
+function txStatus(t){
+  if(!txnHasDue(t.kind))return badge("neu","Paid");
+  if(!t.paidOn)return badge("warn",t.kind==="invoice"?"Not paid yet":"Not paid yet");
+  return badge("pos","Paid "+fmtDate(t.paidOn));
+}
+function vTransactions(){
+  const all=(S.txns||[]).slice().sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
+  const f=S.ui.txMonth,list=f==="all"?all:all.filter(t=>t.date.slice(0,7)===f);
+  const kind=S.ui.txKind,cats=txCatOpts(kind),w=canWrite();
+  const tot=txnTotalsByMonth(S.txns),months=Object.keys(tot).sort().reverse();
+  const sumIn=list.filter(t=>txnIsIncome(t.kind)).reduce((a,t)=>a+t.amount,0),sumOut=list.filter(t=>["expense","bill","equipment"].includes(t.kind)).reduce((a,t)=>a+t.amount,0);
+  const ctrls=selectBox("txMonth",[["all","All months"],...monthOpts()],f,"Show month")+`<button class="btn" data-act="txExport"${all.length?"":" disabled"}>${ic("download",16)}Export CSV</button>`;
+  const form=w?`<section class="card"><div class="card-h"><div class="t"><h2>Add a transaction</h2><p>Amounts exclude GST. Dates from ${fmtDate(txFirst())} to ${fmtDate(DS.asof)}, the period your books cover.</p></div></div>
+    <div class="form" id="txForm">
+      <div class="field"><label for="txKind">Type</label><span class="inp"><select id="txKind">${TXN_KINDS.map(([v,t])=>`<option value="${v}"${v===kind?" selected":""}>${esc(t)}</option>`).join("")}</select></span></div>
+      <div class="field"><label for="txDate">Date</label><span class="inp"><input id="txDate" type="date" min="${txFirst()}" max="${DS.asof}" value="${DS.asof}"></span></div>
+      ${cats.length?`<div class="field"><label for="txCat">Category</label><span class="inp"><select id="txCat">${cats.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join("")}</select></span></div>`:""}
+      <div class="field"><label for="txAmt">Amount</label><span class="inp"><span class="pre">S$</span><input id="txAmt" class="r" inputmode="decimal" placeholder="0.00"></span></div>
+      <div class="field${txnHasDue(kind)?"":" wide"}"><label for="txDesc">Description <span class="muted">(optional)</span></label><span class="inp"><input id="txDesc" maxlength="120" placeholder="${txnIsIncome(kind)?"e.g. Office lunch order, Tanjong Corp":"e.g. Flour delivery, Fresh Farm"}"></span></div>
+      ${txnHasDue(kind)?`<div class="field"><label for="txPaid">Paid on <span class="muted">(leave empty if not paid yet)</span></label><span class="inp"><input id="txPaid" type="date" min="${txFirst()}"></span></div>`:""}
+    </div>
+    <p class="err" id="txErr" role="alert"></p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn pri" data-act="addTxn">${ic("plus",16)}Add transaction</button></div>
+    <p class="note" style="margin-top:10px">${esc(txHelp(kind))}</p></section>
+  <section class="card"><div class="card-h"><div class="t"><h2>Import from a spreadsheet</h2><p>Upload a CSV file with the columns <code>date, type, category, amount, description, paid_on</code>. Use the category names shown above.</p></div><button class="btn sm" data-act="txTemplate">${ic("download",15)}Template</button></div>
+    <label class="btn" style="cursor:pointer">${ic("upload",16)}Choose CSV file<input type="file" id="txFile" accept=".csv,text/csv" hidden></label>
+    <div id="txImport" aria-live="polite"></div></section>`
+  :`<section class="card attn"><div class="card-h"><div class="t"><h2>View only</h2><p>Your role can see recorded transactions but not add or remove them.</p></div></div></section>`;
+  const rows=list.map(t=>`<tr><td class="muted" style="white-space:nowrap">${fmtDate(t.date)}</td><td>${esc(TX_TXT[t.kind])}</td><td>${esc(t.category?catName(t.category):"—")}${t.description?`<small style="display:block;color:var(--text-3)">${esc(t.description)}</small>`:""}</td><td>${txStatus(t)}</td><td class="n ${txnIsIncome(t.kind)?"up-good":""}">${t.amount.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}</td><td style="width:40px">${w?`<button class="icon-btn sm" data-act="delTxn" data-id="${esc(t.id)}" aria-label="Delete transaction">${ic("trash",15)}</button>`:""}</td></tr>`).join("");
+  return topbar(ctrls)+`<div class="split"><div class="stack">${form}
+  <section class="card"><div class="card-h"><div class="t"><h2>Recorded transactions</h2><p>${list.length} ${list.length===1?"transaction":"transactions"}${f==="all"?"":" in "+ml(f)} · ${money(sumIn)} income · ${money(sumOut)} spending</p></div></div>
+  ${list.length?`<div class="tw"><table><thead><tr><th>Date</th><th>Type</th><th>Category</th><th>Status</th><th class="n">S$</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`:`<p class="note">No transactions recorded${f==="all"?" yet":" in "+ml(f)}. ${w?"Add one above or import a CSV file.":""}</p>`}</section></div>
+  <aside class="card" style="position:sticky;top:110px"><div class="card-h"><div class="t"><h2>Effect on your books</h2><p>Recorded transactions by month</p></div></div>
+  ${months.length?months.map(k=>`<div class="sumrow"><span>${ml(k)} · ${tot[k].count}</span><b class="num">+${money(tot[k].income)} / −${money(tot[k].spend)}</b></div>`).join(""):`<p class="note">Nothing recorded yet.</p>`}
+  ${bankCheck()}
+  <p class="note" style="margin-top:12px">Each transaction adds to its month on top of the figures from your records, so it flows into the statements, dashboard and forecast. Only record transactions that are missing from the original records, or they'll be counted twice.</p></aside></div>`;
+}
+function txHelp(k){return{
+  sale:"A sale paid on the day: adds to revenue and cash.",
+  invoice:"Revenue counts on the invoice date. The amount sits in receivables until the paid date, when it reaches the bank.",
+  expense:"A cost paid on the day: reduces profit and cash.",
+  bill:"The cost counts on the bill date. The amount sits in payables until the paid date, when it leaves the bank.",
+  equipment:"Equipment bought: cash goes down and the asset goes on the balance sheet. Depreciation isn't added automatically.",
+  loan:"Money borrowed: cash and the loan balance go up.",repayment:"Loan principal repaid: cash and the loan balance go down. Record interest as an expense.",
+  owner_in:"Money the owner puts in: cash and equity go up.",drawings:"Money the owner takes out: cash and equity go down. Not an expense."}[k]||"";}
+function bankCheck(){const h=H[H.length-1],b=DS.bank[h.k];if(b==null)return"";
+  return Math.abs(b-h.cash)<1?`<div class="check ok">${ic("check",16)}<span>${ml(h.k)} closing cash still matches the bank statement</span></div>`:`<div class="check warn">${ic("alert",16)}<span>${ml(h.k)} closing cash is ${money(h.cash)}; the bank statement shows ${money(b)}. Expected if these transactions aren't in the bank records yet.</span></div>`;}
+function addTxn(){
+  const v=id=>(document.getElementById(id)||{}).value||"",err=document.getElementById("txErr");
+  const kind=v("txKind"),date=v("txDate"),amount=Math.round(parseFloat(v("txAmt").replace(/[^\d.]/g,""))*100)/100,paidOn=v("txPaid");
+  const fail=m=>{err.textContent=m;};
+  if(!date||date<txFirst()||date>DS.asof)return fail(`Pick a date from ${fmtDate(txFirst())} to ${fmtDate(DS.asof)}.`);
+  if(!(amount>0))return fail("Enter an amount above zero.");
+  if(paidOn&&paidOn<date)return fail("The paid date can't be before the transaction date.");
+  const t={id:"t"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),date,kind,amount};
+  if(txnNeedsCategory(kind))t.category=v("txCat");
+  const d=v("txDesc").trim();if(d)t.description=d.slice(0,120);
+  if(txnHasDue(kind)&&paidOn)t.paidOn=paidOn;
+  S.txns=[...(S.txns||[]),t];commit();toast(`${TX_TXT[kind]} of ${money(amount)} added to ${ml(date.slice(0,7))}`);
+}
+function importTxns(file){
+  const out=document.getElementById("txImport");
+  if(file.size>1e6){out.innerHTML=`<div class="check bad">${ic("alert",16)}<span>That file is larger than 1 MB.</span></div>`;return;}
+  const rd=new FileReader();
+  rd.onload=()=>{
+    const{rows,errors}=parseTxnCsv(rd.result,S.cats);
+    const ok=rows.filter(r=>r.date>=txFirst()&&r.date<=DS.asof),late=rows.length-ok.length;
+    if(late)errors.push(`${late} ${late===1?"row is":"rows are"} outside ${fmtDate(txFirst())} – ${fmtDate(DS.asof)} and ${late===1?"was":"were"} skipped`);
+    if((S.txns||[]).length+ok.length>5000){out.innerHTML=`<div class="check bad">${ic("alert",16)}<span>That would go over the 5,000 transaction limit.</span></div>`;return;}
+    const stamp=Date.now().toString(36);
+    if(ok.length){S.txns=[...(S.txns||[]),...ok.map((r,i)=>({id:`t${stamp}${i.toString(36)}`,...r,description:r.description||undefined}))];commit();}
+    const box=document.getElementById("txImport");if(!box)return;
+    box.innerHTML=(ok.length?`<div class="check ok">${ic("check",16)}<span>Imported ${ok.length} ${ok.length===1?"transaction":"transactions"}.</span></div>`:"")+
+      (errors.length?`<div class="check warn">${ic("alert",16)}<span>${errors.length} ${errors.length===1?"problem":"problems"}:<br>${errors.slice(0,8).map(esc).join("<br>")}${errors.length>8?`<br>…and ${errors.length-8} more`:""}</span></div>`:"");
+  };
+  rd.readAsText(file);
+}
+const csvCell=v=>{const s=String(v??"");return/[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s;};
+function download(name,text){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type:"text/csv"}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+function txCsv(list){return"date,type,category,amount,description,paid_on\n"+list.map(t=>[t.date,t.kind,t.category?catName(t.category):"",t.amount,t.description||"",t.paidOn||""].map(csvCell).join(",")).join("\n");}
+
+/* ---------- Financial model ---------- */
+const mBase=()=>{const L12=H.slice(-12),last=H[H.length-1];return{L12,last,ebitdaL12:L12.reduce((a,h)=>a+h.op+h.dep,0)};};
+const modelRows=sc=>threeStatement(forecast(S,H,sc,36),H[H.length-1]);
+function actualYear(L12){const s=f=>L12.reduce((a,h)=>a+h[f],0),last=L12[L12.length-1];
+  return{rev:s("rev"),pos:s("pos"),b2b:s("b2b"),oneRev:0,cogs:s("cogs"),gross:s("gross"),opexCash:s("opex")-s("dep"),dep:s("dep"),ebitda:s("op")+s("dep"),op:s("op"),interest:s("interest"),tax:s("tax"),np:s("np"),
+    cfo:s("cfo"),cfi:s("cfi"),cff:s("cff"),capex:s("capex")-s("assetSale"),loansIn:s("loanIn"),principal:s("loanRepay"),equityIn:s("ownerIn"),drawings:s("drawings"),otherPay:0,openCash:L12[0].openCash,
+    cash:last.cash,ar:last.ar,inv:last.inv,oca:last.oca,deposit:last.deposit,equip:last.equip,ap:last.ap,ocl:last.ocl,loan:last.loan,equity:last.equity,curAssets:last.curAssets,assets:last.assets,liab:last.liab};}
+function modelLines(tab){
+  const L=(label,f,o={})=>({label,f,...o});
+  if(tab==="pl")return[L("Café sales",c=>c.pos),L("Catering & wholesale",c=>c.b2b),L("One-off revenue",c=>c.oneRev),L("Revenue",c=>c.rev,{sub:1,term:"revenue"}),
+    L("Cost of goods sold",c=>-c.cogs,{term:"cogs"}),L("Gross profit",c=>c.gross,{sub:1,term:"gross"}),L("Gross margin",c=>c.rev?c.gross/c.rev:null,{ratio:1}),
+    L("Operating expenses (excl. depreciation)",c=>-c.opexCash,{term:"opex"}),L("EBITDA",c=>c.ebitda,{sub:1,term:"ebitda"}),L("Depreciation",c=>-c.dep,{term:"dep"}),L("Operating profit",c=>c.op,{sub:1,term:"op"}),
+    L("Loan interest",c=>-c.interest),L("Corporate tax",c=>-c.tax,{term:"cit"}),L("Net profit",c=>c.np,{total:1,term:"np"}),L("Net margin",c=>c.rev?c.np/c.rev:null,{ratio:1})];
+  if(tab==="cf")return[{grp:"Operating activities"},L("Net profit",c=>c.np),L("Add back depreciation",c=>c.dep),L("Working capital & taxes payable",c=>c.cfo-c.np-c.dep),L("Cash from operations",c=>c.cfo,{sub:1,term:"ocf"}),
+    {grp:"Investing activities"},L("Equipment",c=>-c.capex),L("Cash from investments",c=>c.cfi,{sub:1,term:"icf"}),
+    {grp:"Financing activities"},L("Loans received",c=>c.loansIn),L("Loan repayments",c=>-c.principal),L("Owner money in",c=>c.equityIn),L("Owner drawings",c=>-c.drawings,{term:"draw"}),L("Other planned payments",c=>-c.otherPay),L("Cash from financing",c=>c.cff,{sub:1,term:"fcf"}),
+    L("Net change in cash",c=>c.cash-c.openCash,{sub:1}),L("Opening cash",c=>c.openCash),L("Closing cash",c=>c.cash,{total:1,term:"cash"})];
+  return[{grp:"Assets"},L("Cash",c=>c.cash,{term:"cash"}),L("Accounts receivable",c=>c.ar,{term:"ar"}),L("Inventory",c=>c.inv,{term:"inv"}),L("Settlements in transit & prepayments",c=>c.oca,{term:"oca"}),L("Current assets",c=>c.curAssets,{sub:1}),
+    L("Rental deposit",c=>c.deposit),L("Equipment, net",c=>c.equip),L("Total assets",c=>c.assets,{total:1}),
+    {grp:"Liabilities & equity"},L("Accounts payable",c=>c.ap,{term:"ap"}),L("GST, CPF & tax payable",c=>c.ocl,{term:"ocl"}),L("Loans",c=>c.loan,{term:"loan"}),L("Total liabilities",c=>c.liab,{sub:1}),
+    L("Equity",c=>c.equity,{term:"equity"}),L("Total liabilities & equity",c=>c.liab+c.equity,{total:1,term:"bs"})];
+}
+function modelTable(tab,cols){
+  let t=`<div class="tw"><table class="mtbl"><thead><tr><th>S$</th>${cols.map(c=>`<th class="n">${c.head}</th>`).join("")}</tr></thead><tbody>`;
+  modelLines(tab).forEach(r=>{
+    if(r.grp){t+=`<tr class="grp"><td colspan="${cols.length+1}">${esc(r.grp)}</td></tr>`;return;}
+    const cls=r.total?"total":r.sub?"sub":r.ratio?"ratio":"line";
+    t+=`<tr class="${cls}"><td>${esc(r.label)}${r.term&&G[r.term]?" "+info(r.term):""}</td>${cols.map(c=>{const v=r.f(c.d);return`<td class="n${c.act?" muted":""}">${r.ratio?pct(v):full(v)}</td>`;}).join("")}</tr>`;
+  });
+  return t+"</tbody></table></div>";
+}
+function vModel(){
+  const sc=S.ui.scenario,tab=S.ui.mTab,view=S.ui.mView,yr=S.ui.mYear||1;
+  const{L12,last,ebitdaL12}=mBase(),M=modelRows(sc),Y=annualize(M),A=actualYear(L12);
+  const val=valuation(M,S.model,{cash:last.cash,loan:last.loan,ebitdaL12});
+  const yLabel=(y,i)=>`Year ${i+1}<small style="display:block;font-weight:500;color:var(--text-3)">${ms(y.from)} – ${msy(y.to)}</small>`;
+  const ctrls=segBtns("scenario",[["worst","Worst","--neg"],["expected","Expected","--fc"],["best","Best","--pos"]],sc)+`<button class="btn" data-act="modelCsv">${ic("copy",16)}Copy CSV</button>`;
+  const kpis=[["Year 1 revenue",money(Y[0].rev),`${sgnPct(chg(Y[0].rev,A.rev))} vs last 12 months`],["Year 1 net profit",money(Y[0].np),`${pct(Y[0].rev?Y[0].np/Y[0].rev:0)} net margin`],
+    ["Cash at end of year 3",money(Y[2].cash),Y.some(y=>y.cash<0)||M.some(r=>r.cash<0)?`Goes below zero in ${ml((M.find(r=>r.cash<0)||{}).k||Y[2].to)}`:`Lowest ${money(Math.min(...M.map(r=>r.cash)))}`],
+    ["Business value (DCF)",val.valid&&val.equity>0?money(val.equity):"Not meaningful",val.valid&&val.equity>0?`Multiple method: ${money(Math.max(0,val.equityMult))}`:"Cash flows are too low or negative"]];
+  let body;
+  if(tab==="be")body=vBreakEven(M,L12);
+  else if(tab==="val")body=vValuation(M,val,last,ebitdaL12);
+  else{
+    const cols=view==="annual"?[{head:`Last 12 mo<small style="display:block;font-weight:500;color:var(--text-3)">Actual</small>`,d:A,act:1},...Y.map((y,i)=>({head:yLabel(y,i),d:y}))]
+      :M.slice((yr-1)*12,yr*12).map(r=>({head:ms(r.k)+`<small style="display:block;font-weight:500;color:var(--text-3)">${r.k.slice(0,4)}</small>`,d:r}));
+    const maxErr=Math.max(...M.map(r=>Math.abs(r.check)));
+    body=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">${segBtns("mView",[["annual","By year"],["monthly","By month"]],view)}${view==="monthly"?segBtns("mYear",Y.map((y,i)=>[i+1,"Year "+(i+1)]),yr):""}</div>`+modelTable(tab,cols)+
+      (tab==="bs"?`<div class="check ${maxErr<1?"ok":"bad"}">${ic(maxErr<1?"check":"alert",16)}<span>${maxErr<1?"Balances in every forecast month: assets = liabilities + equity":"Out of balance by "+money(maxErr)}</span></div>`:"")+
+      `<p class="note" style="margin-top:10px">${esc(MODEL_NOTES[tab])}</p>`;
+  }
+  return topbar(ctrls)+`<div class="stack">
+  <section class="grid g4">${kpis.map(([l,v,f])=>`<div class="card kpi"><div class="kpi-h"><span class="l">${l}</span></div><div class="kpi-v num" style="font-size:26px">${v}</div><div class="kpi-f">${esc(f)}</div></div>`).join("")}</section>
+  <section class="card"><div class="card-h"><div class="t"><h2>${{pl:"Profit & loss",cf:"Cash flow",bs:"Balance sheet",be:"Break-even & unit economics",val:"Valuation"}[tab]}</h2><p>${SC[sc].name} case · forecast from ${ml(M[0].k)} to ${ml(M[M.length-1].k)}, using your assumptions and planned events</p></div></div>
+  <div style="margin-bottom:14px">${segBtns("mTab",[["pl","Profit & loss"],["cf","Cash flow"],["bs","Balance sheet"],["be","Break-even"],["val","Valuation"]],tab)}</div>${body}</section></div>`;
+}
+const MODEL_NOTES={
+  pl:"Revenue, costs and growth come from the Assumptions page. Fixed costs rise each January by the scenario's cost increase; card fees follow café sales.",
+  cf:"Working capital covers customer invoices not yet paid and GST, CPF and tax owed but not yet paid. Other planned payments are payment events that aren't GST or tax, such as an owner withdrawal.",
+  bs:"Starts from your last actual balance sheet. Stock, prepayments, the rental deposit and supplier payables stay at their last actual level; the other lines move with the forecast's cash flows."};
+function vBreakEven(M,L12){
+  const varIds=S.cats.opex.filter(c=>c.type==="VARIABLE").map(c=>c.id),a=breakEvenActual(L12,varIds),f=breakEvenForecast(M.slice(0,12));
+  const row=(l,fa,ff,fmt=money,term)=>`<tr class="line"><td>${l}${term?" "+info(term):""}</td><td class="n">${fmt(fa)}</td><td class="n">${fmt(ff)}</td></tr>`;
+  const sumL=f=>L12.reduce((x,h)=>x+h[f],0),cat=id=>L12.reduce((x,h)=>x+(h.opexCat[id]||0),0),rev=sumL("rev"),staff=DS.business.staff||0;
+  CHARTS.push({id:"chBE",cfg:{title:"Monthly revenue against break-even",h:220,labels:M.slice(0,12).map(r=>ms(r.k)),tipKeys:M.slice(0,12).map(r=>ml(r.k)),refLine:{v:f.beM,label:"Break-even "+money(f.beM)},
+    series:[{name:"Revenue",type:"bar",values:M.slice(0,12).map(r=>r.rev),colorAt:(i,v)=>v>=f.beM?"--pos":"--neg"}]}});
+  const units=[["Average café sales per day",money(sumL("pos")/365)],["Average catering & wholesale per month",money(sumL("b2b")/12)],["Gross margin",pct(rev?sumL("gross")/rev:0)],
+    ["Contribution per S$100 of sales",money(a.cmr*100,2)],["Staff costs (salaries + CPF)",pct(rev?(cat("sal")+cat("cpf"))/rev:0)+" of revenue"],["Rent",pct(rev?cat("rent")/rev:0)+" of revenue"],
+    ...(staff?[["Revenue per employee per year",money(rev/staff)]]:[])];
+  return`<div class="split eq" style="gap:18px"><div><div class="tw"><table><thead><tr><th>Per month, average</th><th class="n">Last 12 mo<small style="display:block;font-weight:500;color:var(--text-3)">Actual</small></th><th class="n">Year 1<small style="display:block;font-weight:500;color:var(--text-3)">${SC[S.ui.scenario].name}</small></th></tr></thead><tbody>
+    ${row("Revenue",a.revM,f.revM)}${row("Variable costs",a.variableM,f.variableM)}${row("Contribution margin",a.cmr,f.cmr,v=>pct(v))}${row("Fixed costs",a.fixedM,f.fixedM)}
+    <tr class="sub"><td>Break-even revenue</td><td class="n">${money(a.beM)}</td><td class="n">${money(f.beM)}</td></tr>${row("Break-even sales per day",a.beDay,f.beDay)}${row("Margin of safety",a.safety,f.safety,v=>pct(v))}
+    <tr class="total"><td>Profit before tax</td><td class="n">${full(a.profitM)}</td><td class="n">${full(f.profitM)}</td></tr></tbody></table></div>
+    <p class="note" style="margin-top:10px">Variable costs move with sales: cost of goods and card fees. Fixed costs don't: staff, rent, utilities, depreciation and loan interest. Break-even is the monthly revenue where profit before tax is zero. Margin of safety is how far revenue can fall before the business makes a loss.</p></div>
+    <div><h3 style="font-size:14px;margin:0 0 8px">Unit economics · last 12 months</h3>${units.map(([l,v])=>`<div class="sumrow"><span>${l}</span><b class="num">${v}</b></div>`).join("")}
+    <h3 style="font-size:14px;margin:18px 0 8px">Year 1 revenue against break-even</h3><div class="chart" id="chBE"></div></div></div>`;
+}
+function vValuation(M,v,last,ebitdaL12){
+  const m=S.model,w=canWrite();
+  const inp=(k,l,suf,step,pre)=>`<div class="field"><label for="mv-${k}">${l}</label><span class="inp">${pre?`<span class="pre">${pre}</span>`:""}<input class="r" type="number" id="mv-${k}" data-model="${k}" step="${step}" value="${m[k]}"><span class="suf">${suf}</span></span></div>`;
+  const bySc=["worst","expected","best"].map(sc=>[sc,sc===S.ui.scenario?v:valuation(modelRows(sc),m,{cash:last.cash,loan:last.loan,ebitdaL12})]);
+  const eqTxt=x=>x.valid&&x.equity>0?money(x.equity):"Not meaningful";
+  const line=(l,val,cls="line")=>`<tr class="${cls}"><td>${l}</td><td class="n">${full(val)}</td></tr>`;
+  return`<div class="split eq" style="gap:18px"><div>
+    <div class="form" style="margin-bottom:6px">${inp("discount","Discount rate","% a year",0.5)}${inp("growth","Long-term growth","% a year",0.5)}${inp("multiple","EBITDA multiple","×",0.5)}${inp("ownerPay","Market salary for the owner","/ month",100,"S$")}</div>
+    <p class="note">${w?"":"Changes here aren't saved for your role. "}The owner is paid through drawings, so a market salary is deducted first, as a buyer would have to pay someone to run the business. Small private businesses are usually valued with a discount rate of 15–25% and at 2–4× EBITDA.</p>
+    <h3 style="font-size:14px;margin:16px 0 8px">Value in each scenario</h3>
+    <div class="tw"><table><thead><tr><th></th><th class="n">Discounted cash flow</th><th class="n">EBITDA multiple</th></tr></thead><tbody>${bySc.map(([sc,x])=>`<tr class="line"><td><span style="display:inline-flex;align-items:center;gap:6px;font-weight:600"><i class="dot" style="background:var(${SC[sc].color})"></i>${SC[sc].name}</span></td><td class="n">${eqTxt(x)}</td><td class="n">${money(Math.max(0,x.equityMult))}</td></tr>`).join("")}</tbody></table></div>
+    ${v.valid&&v.tvShare>.75?`<div class="check warn">${ic("alert",16)}<span>${pct(v.tvShare,0)} of the DCF value comes after year 3, so it depends heavily on the growth assumptions holding.</span></div>`:""}
+    <p class="note" style="margin-top:10px">An estimate for planning and conversations with lenders or buyers, not a formal valuation.</p></div>
+  <div><h3 style="font-size:14px;margin:0 0 8px">Discounted cash flow · ${SC[S.ui.scenario].name}</h3><div class="tw"><table><tbody>
+    ${line("Free cash flow, 36 months, after owner salary",M.reduce((a,r)=>a+r.fcf,0)-m.ownerPay*M.length)}${line("Present value of that cash flow",v.pvFcf)}
+    ${line(`Value after year 3 (${m.growth}% growth a year)`,v.tv)}${line("Present value of that",v.pvTv)}${line("Enterprise value",v.ev,"sub")}
+    ${line("Add cash",last.cash)}${line("Less loans",-last.loan)}${line("Equity value",v.equity,"total")}</tbody></table></div>
+    <h3 style="font-size:14px;margin:18px 0 8px">EBITDA multiple</h3><div class="tw"><table><tbody>
+    ${line("EBITDA, last 12 months",ebitdaL12)}${line("Less owner salary",-m.ownerPay*12)}${line("Adjusted EBITDA",v.ebitdaAdj,"sub")}${line(`× ${m.multiple} = enterprise value`,v.evMult)}
+    ${line("Add cash, less loans",-v.netDebt)}${line("Equity value",v.equityMult,"total")}</tbody></table></div></div></div>`;
+}
+function modelCsv(){
+  const sc=S.ui.scenario,M=modelRows(sc),Y=annualize(M),A=actualYear(H.slice(-12)),cols=[A,...Y];
+  const out=[["S$","Last 12 months (actual)",...Y.map((y,i)=>`Year ${i+1} (${y.from} to ${y.to})`)].map(csvCell).join(",")];
+  [["Profit & loss","pl"],["Cash flow","cf"],["Balance sheet","bs"]].forEach(([t,tab])=>{out.push(csvCell(t));modelLines(tab).forEach(r=>{if(r.grp){out.push(csvCell(r.grp));return;}out.push([r.label,...cols.map(c=>{const v=r.f(c);return v==null?"":r.ratio?(v*100).toFixed(1)+"%":Math.round(v);})].map(csvCell).join(","));});});
+  return`Financial model, ${SC[sc].name} case, ${DS.business.legal}\n`+out.join("\n");
+}
+
+/* ---------- AI assistant ---------- */
+let CHAT=[],chatBusy=false,chatDraft="";
+const chatKey=()=>`fintellect-chat-${DS.business.id}-${USER.id}`;
+function loadChat(){try{const c=JSON.parse(sessionStorage.getItem(chatKey())||"[]");return Array.isArray(c)?c.slice(-40):[];}catch(e){return[];}}
+function saveChat(){try{sessionStorage.setItem(chatKey(),JSON.stringify(CHAT.slice(-40)));}catch(e){}}
+const SUGGEST=()=>[`Why is cash expected to drop in November?`,`How much does ${KC} owe us, and how late do they pay?`,`What were our biggest expenses last quarter?`,`What monthly revenue do we need to break even?`,`Compare the worst and best case for the next 12 months`,`How did September compare with August?`];
+// Minimal, safe Markdown: everything is escaped first, then a few patterns become tags.
+const MD_BLOCK=/^\s*(\|.*\|\s*$|[-*•]\s+|\d+[.)]\s+|#{1,4}\s+)/;
+function mdLite(src){
+  const inline=s=>esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/`([^`]+)`/g,"<code>$1</code>");
+  const lines=String(src).split("\n"),out=[];let i=0;
+  while(i<lines.length){const l=lines[i];
+    if(/^\s*\|.*\|\s*$/.test(l)){const rows=[];while(i<lines.length&&/^\s*\|.*\|\s*$/.test(lines[i]))rows.push(lines[i++]);
+      const cells=r=>r.trim().replace(/^\||\|$/g,"").split("|").map(c=>c.trim());const body=rows.filter(r=>!/^\s*\|[\s:|-]+\|\s*$/.test(r));if(!body.length)continue;
+      out.push(`<div class="tw"><table><thead><tr>${cells(body[0]).map(c=>`<th>${inline(c)}</th>`).join("")}</tr></thead><tbody>${body.slice(1).map(r=>`<tr>${cells(r).map(c=>`<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`);continue;}
+    if(/^\s*[-*•]\s+/.test(l)){const it=[];while(i<lines.length&&/^\s*[-*•]\s+/.test(lines[i]))it.push(lines[i++].replace(/^\s*[-*•]\s+/,""));out.push(`<ul>${it.map(x=>`<li>${inline(x)}</li>`).join("")}</ul>`);continue;}
+    if(/^\s*\d+[.)]\s+/.test(l)){const it=[];while(i<lines.length&&/^\s*\d+[.)]\s+/.test(lines[i]))it.push(lines[i++].replace(/^\s*\d+[.)]\s+/,""));out.push(`<ol>${it.map(x=>`<li>${inline(x)}</li>`).join("")}</ol>`);continue;}
+    if(/^#{1,4}\s+/.test(l)){out.push(`<h4>${inline(l.replace(/^#{1,4}\s+/,""))}</h4>`);i++;continue;}
+    if(!l.trim()){i++;continue;}
+    // A paragraph runs until a blank line or a line that starts another block; it always takes at least one line.
+    const p=[lines[i++]];while(i<lines.length&&lines[i].trim()&&!MD_BLOCK.test(lines[i]))p.push(lines[i++]);out.push(`<p>${p.map(inline).join("<br>")}</p>`);}
+  return out.join("");
+}
+function vAssistant(){
+  if(!ASSIST)return topbar("")+`<section class="card attn"><div class="card-h"><div class="t"><h2>The AI assistant isn't set up yet</h2><p>It uses Claude, Anthropic's AI model, and needs an API key on the server.</p></div></div>
+    <ol class="note" style="margin:0;padding-left:18px;line-height:1.7"><li>Create an API key at console.anthropic.com.</li><li>Add it to the server's environment as <code>ANTHROPIC_API_KEY</code> (in Vercel: Settings → Environment Variables).</li><li>Redeploy, then come back to this page.</li></ol></section>`;
+  const msgs=CHAT.map(m=>`<div class="msg ${m.role==="user"?"me":"ai"}${m.error?" err":""}">${m.role==="user"?`<p>${esc(m.content).replace(/\n/g,"<br>")}</p>`:mdLite(m.content)}</div>`).join("");
+  return topbar(CHAT.length?`<button class="btn" data-act="askClear">${ic("reset",16)}New chat</button>`:"")+`<section class="card chat">
+    <div class="msgs" id="chatMsgs" aria-live="polite">${CHAT.length?msgs:`<div class="chat-empty"><span class="chip-ic">${ic("chat",20)}</span><h2>Ask about ${esc(DS.business.name)}'s finances</h2><p class="note">Answers use your statements, forecast and recorded transactions, up to ${fmtDate(DS.asof)}.</p>
+      <div class="presets" style="justify-content:center;margin-top:14px">${SUGGEST().map((q,i)=>`<button class="pill" data-act="askSuggest" data-ix="${i}">${esc(q)}</button>`).join("")}</div></div>`}
+      ${chatBusy?`<div class="msg ai busy"><p>Looking at your numbers…</p></div>`:""}</div>
+    <form class="ask" id="askForm"><label class="inp"><textarea id="askInput" rows="2" maxlength="2000" placeholder="Ask a question, e.g. what drove the drop in profit in June?" aria-label="Your question"${chatBusy?" disabled":""}>${esc(chatDraft)}</textarea></label>
+      <button class="btn pri" type="submit"${chatBusy?" disabled":""} aria-label="Send">${ic("send",16)}Ask</button></form>
+    <p class="note" style="margin:8px 2px 0">Powered by Claude. It reads your business's figures but can't change them. Check important numbers in the statements; this isn't financial advice.</p></section>`;
+}
+function scrollChat(){const el=document.getElementById("chatMsgs");if(el)el.scrollTop=el.scrollHeight;const inp=document.getElementById("askInput");if(inp&&!chatBusy)inp.focus();}
+async function askAI(q){
+  q=String(q||"").trim();if(!q||chatBusy)return;
+  CHAT.push({role:"user",content:q});chatDraft="";chatBusy=true;saveChat();render(true);scrollChat();
+  try{
+    const history=CHAT.filter(m=>!m.error).map(({role,content})=>({role,content}));
+    const r=await api(`/api/businesses/${DS.business.id}/assistant`,{method:"POST",body:JSON.stringify({messages:history})});
+    CHAT.push({role:"assistant",content:r.answer});
+  }catch(e){CHAT.push({role:"assistant",content:e.message,error:true});}
+  chatBusy=false;saveChat();if(route==="assistant"){render(true);scrollChat();}
+}
+
+/* ---------- Feature events ---------- */
+const FEATURE_ACTS={
+  addTxn:()=>addTxn(),
+  delTxn:a=>{S.txns=(S.txns||[]).filter(t=>t.id!==a.dataset.id);commit();toast("Transaction deleted");},
+  txTemplate:()=>download("transactions-template.csv",`date,type,category,amount,description,paid_on\n${DS.asof},sale,${csvCell(S.cats.rev[0]?.name||"")},250.00,Example walk-in order,\n${DS.asof},invoice,${csvCell((S.cats.rev.find(c=>c.group!==POS_GROUP)||S.cats.rev[0])?.name||"")},1200.00,Example catering invoice,\n${DS.asof},bill,${csvCell(S.cats.cogs[0]?.name||"")},480.00,Example supplier bill,${DS.asof}\n`),
+  txExport:()=>download(`transactions-${DS.business.id}.csv`,txCsv((S.txns||[]).slice().sort((a,b)=>a.date<b.date?-1:1))),
+  modelCsv:()=>copyText(modelCsv(),"Financial model"),
+  askSuggest:a=>askAI(SUGGEST()[+a.dataset.ix]),
+  askClear:()=>{CHAT=[];saveChat();render(true);},
+};
+function featureChange(t){
+  if(t.id==="txKind"){S.ui.txKind=t.value;save();render(true);return true;}
+  if(t.id==="txMonth"){S.ui.txMonth=t.value;save();render(true);return true;}
+  if(t.id==="txFile"&&t.files&&t.files[0]){importTxns(t.files[0]);t.value="";return true;}
+  if(t.dataset.model){const v=parseFloat(t.value),k=t.dataset.model,m={...S.model,[k]:isFinite(v)?v:0};
+    const lim={discount:[0,100],growth:[-20,20],multiple:[0,50],ownerPay:[0,1e7]}[k];m[k]=Math.min(lim[1],Math.max(lim[0],m[k]));
+    if(m.growth>=m.discount){toast("Long-term growth must be below the discount rate");render(true);return true;}
+    S.model=m;commit();return true;}
+  return false;
+}
+document.addEventListener("submit",e=>{if(e.target.id==="askForm"){e.preventDefault();askAI(document.getElementById("askInput").value);}});
+document.addEventListener("keydown",e=>{if(e.target.id==="askInput"&&e.key==="Enter"&&!e.shiftKey){e.preventDefault();askAI(e.target.value);}});
+document.addEventListener("input",e=>{if(e.target.id==="askInput")chatDraft=e.target.value;});

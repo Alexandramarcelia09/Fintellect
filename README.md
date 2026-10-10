@@ -5,16 +5,20 @@ A finance copilot for small businesses. It turns a business's own records (POS s
 - monthly financial statements that reconcile to the bank to the cent
 - a financial health dashboard with receivables tracking and bookkeeping checks
 - a 13-week cash forecast and a 12–36 month forecast, each with Worst, Expected and Best scenarios
+- a Transactions page to record sales, invoices, expenses and bills one by one or from a CSV file
+- a financial model: projected P&L, cash flow and balance sheet for 3 years, break-even and a valuation
+- Ask AI, an assistant that answers questions about the business's own figures using Claude
 
 It runs on the SME Finance Copilot sample dataset for **Crumb & Copper Bakehouse** (business `B001`), a fictional Singapore café and catering bakery. As of 30 Sep 2026 the Expected case drops below the S$30,000 cash buffer in the week of 26 November. Harbourview, the largest customer, now pays about 40 days late; if it paid on time there would be no breach.
 
 ## Quick start
 
-Requires Node.js 20 or later. There are no npm dependencies.
+Requires Node.js 20 or later. The only npm dependency is the Anthropic SDK, used by the AI assistant.
 
 ```bash
+npm install
 npm start              # http://localhost:3000
-npm test               # 50 tests
+npm test               # 66 tests
 npm run build:data     # optional: writes var/bootstrap-<id>.json for inspection
 ```
 
@@ -38,6 +42,7 @@ Sign in with any demo account. The demo passcode is `demo1234` (set `FINTELLECT_
 | `FINTELLECT_SECURE_COOKIES` | off | Set to `1` behind HTTPS so cookies get the `Secure` flag |
 | `FINTELLECT_DATA_DIR` | `data/sme_sample_dataset` | Folder of CSV tables |
 | `FINTELLECT_VAR_DIR` | `var/` | Saved edits (`var/state/<business>.json`) and the audit log (`var/audit.jsonl`) |
+| `ANTHROPIC_API_KEY` | none | Turns on Ask AI. Without it the page explains how to set it up. Create a key at console.anthropic.com. |
 
 The app was previously called Neraca; the old `NERACA_*` names still work.
 
@@ -50,7 +55,7 @@ docker build -t fintellect .
 docker run -p 3000:3000 -e FINTELLECT_SECRET="$(openssl rand -hex 32)" -e FINTELLECT_SECURE_COOKIES=1 -v fintellect-var:/app/var fintellect
 ```
 
-**Vercel**: `api/index.js` and `vercel.json` run the app as one serverless function. In the project's Environment Variables set `FINTELLECT_SECRET` (32+ random characters), then redeploy. Saved edits and the activity log are written to `/tmp`, so they reset whenever Vercel recycles the function; use a host with a persistent disk (below) to keep them.
+**Vercel**: `api/index.js` and `vercel.json` run the app as one serverless function. In the project's Environment Variables set `FINTELLECT_SECRET` (32+ random characters) and, for Ask AI, `ANTHROPIC_API_KEY`, then redeploy. Saved edits and the activity log are written to `/tmp`, so they reset whenever Vercel recycles the function; use a host with a persistent disk (below) to keep them.
 
 **Any Node host** (Render, Railway, Fly.io, a VM): run `npm start` with `NODE_ENV=production` and `FINTELLECT_SECRET` set, behind HTTPS, with `var/` on a persistent disk. The server is a single process with no database.
 
@@ -81,9 +86,12 @@ public/index.html                              and the tests: statements, monthl
 | `src/engine/forecast.js` | Monthly forecast, 12–36 months |
 | `src/engine/weekly.js` | 13-week direct cash forecast, item by item |
 | `src/engine/dates.js` | UTC date helpers on ISO strings |
+| `src/engine/transactions.js` | Recorded transactions → monthly inputs; CSV import |
+| `src/engine/model.js` | Three-statement projection, break-even and valuation on top of the monthly forecast |
 | `src/data/*` | Loading, tenant isolation, building the model from raw records |
+| `src/server/assistant.js` | Ask AI: Claude with read-only tools over one business's figures |
 | `src/server/*` | API, sessions, permissions, state validation, audit log |
-| `public/*` | Single-page app (dashboard, statements, input, assumptions, forecast, reports) |
+| `public/*` | Single-page app (dashboard, Ask AI, statements, transactions, input, assumptions, forecast, financial model, reports) |
 | `test/*` | `node:test` suites |
 
 ### API
@@ -100,6 +108,7 @@ All business routes need a session cookie and only work for the signed-in user's
 | `GET /api/businesses/:id/forecast/monthly?scenario=&horizon=12\|24\|36` | read | Monthly forecast and summary |
 | `PUT /api/businesses/:id/state` | write | Saves edits after validation |
 | `DELETE /api/businesses/:id/state` | write | Resets to the dataset |
+| `POST /api/businesses/:id/assistant` `{messages}` | read | Ask AI's answer to the last question, and the tools it used |
 | `GET /api/businesses/:id/audit` | owner | Activity log |
 
 ## How the numbers are built
@@ -164,6 +173,28 @@ Our balances run higher than the reference, and the low point is S$9.7K rather t
 - **GST and tax:** GST collected is paid the month after each quarter, and corporate tax each November. A planned GST or tax event in the same month replaces the automatic payment.
 - **Events:** equipment is depreciated over 5 years. New loans are repaid over 36 months.
 
+### Recorded transactions
+
+Transactions entered on the Transactions page are added to their month on top of the figures from the records, so they flow into the statements, dashboard and forecast. Amounts exclude GST, and dates must fall within the months the books cover.
+
+| Type | Effect |
+|---|---|
+| Sale, expense | Revenue or cost, paid on the day |
+| Customer invoice, supplier bill | Revenue or cost on the issue date; held in receivables or payables until the paid date |
+| Equipment, loan, loan repayment, owner investment, drawings | The matching cash flow and balance sheet line |
+
+CSV import takes the columns `date, type, category, amount, description, paid_on`, matching categories by name. A transaction that's already in the original records would be counted twice; the page flags when closing cash no longer matches the bank statement.
+
+### Financial model
+
+- **Three statements:** a P&L, cash flow and balance sheet for each forecast month and year, from the monthly forecast. The balance sheet starts at the last actual month and moves only by the forecast's flows, so it balances in every month and its cash equals the forecast's. Stock, prepayments, the deposit and supplier payables stay at their last actual level.
+- **Break-even:** variable costs (cost of goods and card fees) against fixed costs (staff, rent, utilities, depreciation and interest), for the last 12 actual months and forecast year 1.
+- **Valuation:** a discounted cash flow over 36 months plus a terminal value, and an EBITDA multiple. The P&L has no salary for the owner, who is paid through drawings, so a market salary (default: current drawings) is deducted first. Defaults are a 15% discount rate, 2% long-term growth and 3× EBITDA, all editable. It's a planning estimate, not a formal valuation.
+
+### Ask AI
+
+The assistant sends the question to Claude (`claude-opus-5-5`) with eight read-only tools: business overview, monthly actuals, monthly forecast, 13-week forecast, financial model, receivables, assumptions and recorded transactions. Each tool reads only the signed-in user's business, with their saved edits. Requests opt into Anthropic's server-side fallback, so a safety decline is retried on a fallback model.
+
 ## Security design
 
 | Area | What's in place |
@@ -173,7 +204,8 @@ Our balances run higher than the reference, and the low point is S$9.7K rather t
 | Authorisation | Capabilities by role: owner (read, write, audit), finance admin (read, write), accountant (read), AI agent (read, draft). Writes from read-only roles are refused and logged. |
 | Input validation | Saved edits must match a strict schema: known months, finite numbers within limits, allowed event kinds and scenarios, length limits. The request body limit is 2 MB. Mutating requests must be JSON, which blocks simple cross-site form posts. |
 | Untrusted content | Bank memos, bill notes, invoice notes and OCR notes are dropped when the data is loaded, so instructions hidden in them can't reach the app or a future agent. Answer-key files are never loaded. |
-| Audit trail | Append-only JSONL: sign-ins, failed sign-ins, saved changes (which sections changed), resets, refused cross-business requests and refused writes. |
+| AI assistant | Tools only read, and only the signed-in user's business; the model can't change anything. Questions are limited to 2,000 characters and 30 per user per hour. Transaction descriptions typed by users reach the model as data, and the system prompt tells it not to follow instructions inside tool results. The audit log records that a question was asked and which tools ran, not the question text. |
+| Audit trail | Append-only JSONL: sign-ins, failed sign-ins, saved changes (which sections changed), resets, refused cross-business requests, refused writes and assistant use. |
 | Browser hardening | CSP with `script-src 'self'` (no inline scripts), `X-Frame-Options: DENY`, `nosniff`, `no-referrer`. Static file serving can't leave `public/` or `src/engine/`. |
 
 ### Known risks and limits
@@ -182,7 +214,9 @@ Our balances run higher than the reference, and the low point is S$9.7K rather t
 - **No multi-factor step yet.** The dataset's payment policy rules call for owner approval with MFA on high-risk payments; that belongs with the payment approval flow, which isn't built yet.
 - **File storage.** Saved edits and the audit log are plain files on one server, with no encryption at rest or log rotation. Use a database with encryption and backups in production.
 - **Forecast granularity.** The monthly forecast shows month-end balances only. The 13-week view is the one to use for timing decisions.
-- **Not financial advice.** Alerts and options are informational.
+- **AI answers.** Ask AI can misread a question or a figure. Each question costs Claude API usage on your Anthropic account. Answers are informational.
+- **Transactions are monthly.** A transaction changes its month's totals; the statements don't keep a running daily balance.
+- **Not financial advice.** Alerts, options and the valuation are informational.
 
 ## Data notes
 

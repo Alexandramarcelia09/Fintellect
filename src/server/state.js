@@ -7,6 +7,7 @@
 
 import { mkdirSync, readFileSync, writeFileSync, existsSync, rmSync, appendFileSync } from "node:fs";
 import { join } from "node:path";
+import { TXN_KINDS, categorySection, txnNeedsCategory, txnIsIncome, txnHasDue, isIsoDate } from "../engine/transactions.js";
 
 const KINDS = new Set(["capex", "payment", "cost", "monthly", "revenue", "in", "equity", "note"]);
 const SCENARIOS = new Set(["worst", "expected", "best"]);
@@ -14,6 +15,8 @@ const ASSUMPTION_KEYS = ["posGrowth", "b2bGrowth", "cogsPct", "opexGrowth", "hvD
 const OTHER_KEYS = ["interest", "tax", "capex", "assetSale", "loanIn", "loanRepay", "ownerIn", "drawings", "ar", "inv", "oca", "deposit", "ap", "ocl"];
 const OPEN_KEYS = ["cash", "ar", "inv", "oca", "deposit", "equip", "ap", "ocl", "loan", "capital", "re"];
 const PROFILE_KEYS = ["name", "legal", "uen", "type", "industry", "country", "gst", "started", "owner", "address", "contact", "fyStart"];
+const TXN_KIND_IDS = new Set(TXN_KINDS.map(([id]) => id));
+const MAX_TXNS = 5000;
 const MAX_ABS = 1e12;
 
 export class ValidationError extends Error {}
@@ -81,6 +84,36 @@ export function validateState(input, DS) {
       if (!Array.isArray(e.sc) || e.sc.some((s) => !SCENARIOS.has(s))) fail(`Invalid scenarios for ${e.id}`);
       return { id: e.id, name: e.name, month: e.month, date: e.date, kind: e.kind, amount: e.amount, sc: [...new Set(e.sc)], certainty: str(e.certainty, 20) ? e.certainty : undefined, payroll: e.payroll === true || undefined };
     });
+  }
+  if (input.txns !== undefined) {
+    if (!Array.isArray(input.txns) || input.txns.length > MAX_TXNS) fail(`txns must be a list of up to ${MAX_TXNS}`);
+    const cats = out.cats || DS.cats, ids = new Set();
+    out.txns = input.txns.map((t) => {
+      const bad = (why) => fail(`Invalid transaction ${String(t?.id).slice(0, 40)}: ${why}`);
+      if (!t || !idOk(t.id) || ids.has(t.id)) bad("id");
+      ids.add(t.id);
+      if (!TXN_KIND_IDS.has(t.kind)) bad("type");
+      if (!isIsoDate(t.date) || !months.has(t.date.slice(0, 7))) bad("date must fall within the months in the books");
+      if (!isNum(t.amount) || t.amount <= 0) bad("amount must be positive");
+      if (t.description !== undefined && !str(t.description, 120)) bad("description is too long");
+      const row = { id: t.id, date: t.date, kind: t.kind, amount: t.amount, description: t.description || undefined };
+      if (txnNeedsCategory(t.kind)) {
+        const sec = idOk(t.category) && categorySection(cats, t.category);
+        if (!sec || (sec === "rev") !== txnIsIncome(t.kind)) bad("category");
+        row.category = t.category;
+      }
+      if (t.paidOn !== undefined && t.paidOn !== null) {
+        if (!txnHasDue(t.kind) || !isIsoDate(t.paidOn) || t.paidOn < t.date) bad("paid date");
+        row.paidOn = t.paidOn;
+      }
+      return row;
+    });
+  }
+  if (input.model !== undefined) {
+    const m = input.model, inRange = (v, lo, hi) => isNum(v) && v >= lo && v <= hi;
+    if (!m || !inRange(m.discount, 0, 100) || !inRange(m.growth, -20, 20) || !inRange(m.multiple, 0, 50) || !inRange(m.ownerPay, 0, 1e7)) fail("Invalid valuation settings");
+    if (m.growth >= m.discount) fail("Long-term growth must be below the discount rate");
+    out.model = { discount: m.discount, growth: m.growth, multiple: m.multiple, ownerPay: m.ownerPay };
   }
   if (input.business !== undefined) {
     out.business = {};
