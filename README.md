@@ -48,6 +48,8 @@ docker build -t neraca .
 docker run -p 3000:3000 -e NERACA_SECRET="$(openssl rand -hex 32)" -e NERACA_SECURE_COOKIES=1 -v neraca-var:/app/var neraca
 ```
 
+**Vercel**: `api/index.js` and `vercel.json` run the app as one serverless function. In the project's Environment Variables set `NERACA_SECRET` (32+ random characters), then redeploy. Saved edits and the activity log are written to `/tmp`, so they reset whenever Vercel recycles the function; use a host with a persistent disk (below) to keep them.
+
 **Any Node host** (Render, Railway, Fly.io, a VM): run `npm start` with `NODE_ENV=production` and `NERACA_SECRET` set, behind HTTPS, with `var/` on a persistent disk. The server is a single process with no database.
 
 ## Architecture
